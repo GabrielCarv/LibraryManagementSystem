@@ -1,0 +1,161 @@
+﻿@model PeoplePhoneViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+@await Component.InvokeAsync("Form", new {formType = "DivCardHead", thisModel = "Person"})
+
+<section class="content">
+    <div class="card">
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Person.Cpf" />
+            <div class="card-body">
+                <div class="row">
+                    <div class="form-group col-6">
+                        <label asp-for="Person.Name" class="control-label"></label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">T</span>
+                            </div>
+                            <input asp-for="Person.Name" class="form-control" placeholder="Name" />
+                            <span asp-validation-for="Person.Name" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-6">
+                        <label asp-for="Person.Email" class="control-label"></label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">@@</span>
+                            </div>
+                            <input asp-for="Person.Email" class="form-control" placeholder="Email" />
+                            <span asp-validation-for="Person.Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div id="divPassword" class="form-group col-6">
+                        <label asp-for="Person.Password" class="control-label"></label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">P</span>
+                            </div>
+                            <input asp-for="Person.Password" class="form-control" placeholder="Password" />
+                            <span asp-validation-for="Person.Password" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="custom-control custom-checkbox">
+                    <input asp-for="Person.IsEmployer" class="custom-control-input" type="checkbox" id="customCheckbox5" checked="">
+                    <label for="customCheckbox5" class="custom-control-label">@Html.DisplayNameFor(model => model.Person.IsEmployer)</label>
+                </div>
+                <div class="row">
+                    <div id="postalCode" class="form-group col-6">
+                        <label asp-for="Person.PostalCode" class="control-label"></label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">A</span>
+                            </div>
+                            <input asp-for="Person.PostalCode" class="form-control" placeholder="PostalCode" />
+                            <span asp-validation-for="Person.PostalCode" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div id="State" class="form-group col-6">
+                        <label asp-for="Person.State" class="control-label"></label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">A</span>
+                            </div>
+                            <input asp-for="Person.State" class="form-control" placeholder="State" />
+                            <span asp-validation-for="Person.State" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div id="City" class="form-group col-6">
+                        <label asp-for="Person.City" class="control-label"></label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">A</span>
+                            </div>
+                            <input asp-for="Person.City" class="form-control" placeholder="City" />
+                            <span asp-validation-for="Person.City" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="Address" class="form-group col-6">
+                        <label asp-for="Person.Address" class="control-label"></label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">A</span>
+                            </div>
+                            <input asp-for="Person.Address" class="form-control" placeholder="Address" />
+                            <span asp-validation-for="Person.Address" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div id="HouseNumber" class="form-group col-6">
+                        <label asp-for="Person.HouseNumber" class="control-label"></label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">A</span>
+                            </div>
+                            <input asp-for="Person.HouseNumber" class="form-control" placeholder="HouseNumber" />
+                            <span asp-validation-for="Person.HouseNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div id="_phone">
+                    @Html.Partial("_CreatePhone")
+                    
+                </div>
+                <div>
+                    <button type="button" id="NewNumberEdit" class="btn btn-success btn-block">Edit Number</button>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary btn-block" />
+                </div>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+                <div class="btn-group">
+                    <input type="submit" value="Save" class="btn bg-gradient-primary" />
+                    @await Component.InvokeAsync("Form", new { formType = "Button", className = "btn bg-gradient-secondary", action ="Index", functionName = "Back to List"})
+                </div>
+            </div>
+        </form>
+        <!-- /.card-footer-->
+    </div>
+</section>
+
+@section Scripts {
+        @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");
+ <script>
+    $("#NewNumberEdit").on("click", function () {
+        $.ajax({
+            url: '~/People/PartialCreate',
+            success: function (view) {
+                var buttId = Math.random() * 10;
+                var divFone = document.createElement('div');
+                divFone.className = 'form-group';
+
+                var buttonRemove = document.createElement('button');
+                var text = document.createTextNode(' X ');
+
+                buttonRemove.type = 'button';
+                buttonRemove.id = 'buttId' + buttId;
+                buttonRemove.setAttribute('onclick', 'RemovePhone(this.id)');
+                buttonRemove.className = 'btn btn-danger';
+
+                buttonRemove.appendChild(text);
+
+                divFone.appendChild(buttonRemove);
+                divFone.insertAdjacentHTML('afterbegin', view);
+
+                var divPhone = document.getElementById("_phone");
+                divPhone.appendChild(divFone);
+
+            }
+        });
+    });
+</script>
+<script src="~/js/select.js"></script>
+<script src="~/js/peopleAction.js"></script>
+}}

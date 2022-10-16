@@ -1,0 +1,31 @@
+﻿@model Category
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+@await Component.InvokeAsync("Form", new {formType = "DivCardHead", thisModel = "Category"})
+
+<section class="content">
+    <div class="card card-info">
+        <div class="card-header">
+            <h3 class="card-title">@ViewData["Title"]</h3>
+        </div>
+        <div class="card-body">
+            <div class="form-group col-12">
+                <label>@Html.DisplayNameFor(model => model.Name)</label>
+                <div class="input-group mb-3">
+                    <input class="form-control" placeholder="@Html.DisplayFor(model => model.Name)" disabled />
+                </div>
+            </div>
+            <div align="center">
+                @await Component.InvokeAsync("Form", new {formType = "Button", className = "btn bg-gradient-warning btn-sm col-2", routeId = @Model?.Id, action ="Edit", functionName = "Edit"})
+            </div>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+            @await Component.InvokeAsync("Form", new { formType = "Button", className = "btn bg-gradient-secondary btn-flat", action ="Index", functionName = "Back to List"})
+        </div>
+        <!-- /.card-footer-->
+    </div>
+</section>

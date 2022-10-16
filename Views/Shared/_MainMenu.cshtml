@@ -1,0 +1,89 @@
+﻿@{
+    int? TypeId = ViewBag.classId;
+    string className = string.Empty;
+}
+
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="#" class="brand-link">
+        <img src="../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">LMS</span>
+    </a>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" role="menu" data-accordion="false">
+                <!-- Rents -->
+                <li class="nav-item">
+                    @if (TypeId == 0)
+                            className = "nav-link active";
+                        else
+                            className = "nav-link";
+                        <a href="~/Rents/Index" class="@className">
+                            <i class="fas fa-money-check nav-icon"></i>
+                            <p>Rents</p>
+                        </a>
+                    </li>
+                    <!-- Books -->
+                    @if (TypeId == 1)
+                            className = "nav-link active";
+                        else
+                            className = "nav-link";
+                    <li class="nav-item">
+                        <a href="~/Books/Index" class="@className">
+                            <i class="fas fa-book nav-icon"></i>
+                            <p>Books</p>
+                        </a>
+                    </li>
+                    <!-- People -->
+                    <li class="nav-item">
+                        @if (TypeId == 2)
+                            className = "nav-link active";
+                        else
+                            className = "nav-link";
+                        <a href="~/People/Index" class="@className">
+                            <i class="fas fa-user nav-icon"></i>
+                            <p>People</p>
+                        </a>
+                    </li>
+                    <!-- Categories -->
+                    <li class="nav-item">
+                        @if (TypeId == 3)
+                            className = "nav-link active";
+                        else
+                            className = "nav-link";
+                        <a href="~/Categories/Index" class="@className">
+                            <i class="fas fa-project-diagram nav-icon"></i>
+                            <p>Categories</p>
+                        </a>
+                    </li>
+                    <!-- Publishers -->
+                    <li class="nav-item">
+                        @if (TypeId == 4)
+                            className = "nav-link active";
+                        else
+                            className = "nav-link";
+                        <a href="~/Publishers/Index" class="@className">
+                            <i class="fas fa-quote-right nav-icon"></i>
+                            <p>Publishers</p>
+                        </a>
+                    </li>
+                    <!-- Properties -->
+                    <li class="nav-item">
+                        @if (TypeId == 5)
+                            className = "nav-link active";
+                        else
+                            className= "nav-link";
+                        <a href="~/Properties/Index" class="@className">
+                            <i class="fas fa-user-tie nav-icon"></i>
+                            <p>Properties</p>
+                        </a>
+
+                    </li>
+                </ul>
+            </nav>
+            <!-- /.sidebar-menu -->
+        </div>
+        <!-- /.sidebar -->
+    </aside>

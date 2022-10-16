@@ -1,0 +1,89 @@
+﻿@model BookCategory
+
+@{
+    ViewData["Title"] = "Edit";
+}
+@section StyleSheet {
+<link rel="stylesheet" href="../../plugins/select2/css/select2.min.css">
+<link rel="stylesheet" href="../../plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+}
+
+@await Component.InvokeAsync("Form", new {formType = "DivCardHead", thisModel = "Book"})
+
+<form asp-action="Edit" method="post">
+    <section class="content">
+        <div class="card">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="form-group col-6">
+                        <input type="hidden" asp-for="Book.Id" />
+                        <label asp-for="Book.Title" class="control-label"></label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">T</span>
+                            </div>
+                            <input asp-for="Book.Title" class="form-control" placeholder="Title" />
+                            <span asp-validation-for="Book.Title" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-6">
+                        <label asp-for="Book.Author" class="control-label"></label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">T</span>
+                            </div>
+                            <input asp-for="Book.Author" class="form-control" placeholder="Author" />
+                            <span asp-validation-for="Book.Author" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-6">
+                        <label asp-for="Book.Price" class="control-label"></label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">$</span>
+                            </div>
+                            <input asp-for="Book.Price" class="form-control" placeholder="Price" />
+                            <span asp-validation-for="Book.Price" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-6">
+                        <label asp-for="Book.Quantity" class="control-label"></label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">N</span>
+                            </div>
+                            <input asp-for="Book.Quantity" class="form-control" placeholder="Quantity" />
+                            <span asp-validation-for="Book.Quantity" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-12 col-6">
+                        <label asp-for="Book.PublisherId" class="control-label"></label>
+                        <select asp-for="Book.PublisherId" class="form-control select2" asp-items="ViewBag.PublisherId"></select>
+                    </div>
+                    @Html.Partial("_BookCategory")
+                </div>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+                <div class="btn-group">
+                    <input type="submit" value="Save" class="btn bg-gradient-primary" />
+                    @await Component.InvokeAsync("Form", new { formType = "Button", className = "btn bg-gradient-secondary", action ="Index", functionName = "Back to List"})
+                </div>
+            </div>
+            <!-- /.card-footer-->
+        </div>
+    </section>
+</form>
+
+@section Scripts
+{
+@{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+<!-- Select2 -->
+<script src="../../plugins/select2/js/select2.full.min.js"></script>
+<script src="~/js/select.js"></script>
+}

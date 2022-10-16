@@ -1,0 +1,54 @@
+﻿@model Rent
+
+@{ ViewData["Title"] = "Delete";}
+
+<section class="content">
+    <div class="card card-info">
+        <div class="card-header">
+            <h3 class="card-title">Are you sure you want to delete this?</h3>
+        </div>
+        <div class="card-body">
+            <div class="form-group col-12">
+                <label>@Html.DisplayNameFor(model => model.Person.Cpf)</label>
+                <div class="input-group mb-3">
+                    <input class="form-control" placeholder="@Html.DisplayFor(model => model.Person.Cpf)" disabled />
+                </div>
+            </div>
+            <div class="form-group col-12">
+                <label>@Html.DisplayNameFor(model => model.Properties.Book.Id)</label>
+                <div class="input-group mb-3">
+                    <input class="form-control" placeholder="@Html.DisplayFor(model => model.Properties.Book.Title)" disabled />
+                </div>
+            </div>
+            <div class="form-group col-12">
+                <label> @Html.DisplayNameFor(model => model.RentalDate)</label>
+                <div class="input-group mb-3">
+                    <input class="form-control" placeholder="@Html.DisplayFor(model => model.RentalDate)" disabled />
+                </div>
+            </div>
+            <div class="form-group col-12">
+                <label> @Html.DisplayNameFor(model => model.RentReturnDate)</label>
+                <div class="input-group mb-3">
+                    <input class="form-control" placeholder=" @Html.DisplayFor(model => model.RentReturnDate)" disabled />
+                </div>
+            </div>
+            <div class="form-group col-12">
+                <label>@Html.DisplayNameFor(model => model.RentRealReturnDate)</label>
+                <div class="input-group mb-3">
+                    <input class="form-control" placeholder=" @Html.DisplayFor(model => model.RentRealReturnDate)" disabled />
+                </div>
+            </div>
+            <div align="center">
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="submit" value="Delete" class="btn bg-gradient-danger btn-sm col-2" />
+                </form>
+            </div>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+            @await Component.InvokeAsync("Form", new { formType = "Button", className = "btn bg-gradient-secondary btn-flat", action ="Index", functionName = "Back to List"})
+        </div>
+        <!-- /.card-footer-->
+    </div>
+</section>

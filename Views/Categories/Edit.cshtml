@@ -1,0 +1,42 @@
+﻿@model Category
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+@await Component.InvokeAsync("Form", new {formType = "DivCardHead", thisModel = "Category"})
+
+<section class="content">
+    <div class="card">
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="card-body">
+                <div class="form-group col-6">
+                    <input type="hidden" asp-for="Id" />
+                    <label asp-for="Name" class="control-label"></label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">T</span>
+                        </div>
+                        <input asp-for="Name" type="text" class="form-control" placeholder="Publisher Name" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+                <div class="btn-group">
+                    <input type="submit" value="Save" class="btn bg-gradient-primary" />
+                    @await Component.InvokeAsync("Form", new { formType = "Button", className = "btn bg-gradient-secondary", action ="Index", functionName = "Back to List"})
+                </div>
+            </div>
+        </form>
+        <!-- /.card-footer-->
+    </div>
+</section>
+
+@section Scripts {
+ @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+}

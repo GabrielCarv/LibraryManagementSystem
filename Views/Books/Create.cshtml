@@ -1,0 +1,86 @@
+﻿@model Book
+
+@{ViewData["Title"] = "Create";}
+@section StyleSheet {
+<link rel="stylesheet" href="../../plugins/select2/css/select2.min.css">
+<link rel="stylesheet" href="../../plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+}
+
+@await Component.InvokeAsync("Form", new {formType = "DivCardHead", thisModel = "Book"})
+
+<section class="content">
+    <div class="card">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="form-group col-6">
+                        <label asp-for="Title" class="control-label"></label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">T</span>
+                            </div>
+                            <input asp-for="Title" class="form-control" placeholder="Title" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-6">
+                        <label asp-for="Author" class="control-label"></label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">T</span>
+                            </div>
+                            <input asp-for="Author" class="form-control" placeholder="Author" />
+                            <span asp-validation-for="Author" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-6">
+                        <label asp-for="Price" class="control-label"></label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">$</span>
+                            </div>
+                            <input asp-for="Price" class="form-control" placeholder="Price" />
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-6">
+                        <label asp-for="Quantity" class="control-label"></label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">N</span>
+                            </div>
+                            <input asp-for="Quantity" class="form-control" placeholder="Quantity" />
+                            <span asp-validation-for="Quantity" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-12 col-6">
+                        <label asp-for="PublisherId" class="control-label"></label>
+                        <select asp-for="PublisherId" class="form-control select2" asp-items="ViewBag.PublisherId"></select>
+                    </div>
+                    @Html.Partial("_BookCategory")
+                </div>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+                <div class="btn-group">
+                    <input type="submit" value="Create" class="btn bg-gradient-primary" />
+                    @await Component.InvokeAsync("Form", new { formType = "Button", className = "btn bg-gradient-secondary", action ="Index", functionName = "Back to List"})
+                </div>
+            </div>
+        </form>
+        <!-- /.card-footer-->
+    </div>
+</section>
+
+
+@section Scripts
+{
+@{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<!-- Select2 -->
+    <script src="../../plugins/select2/js/select2.full.min.js"></script>
+    <script src="~/js/select.js"></script>
+}
