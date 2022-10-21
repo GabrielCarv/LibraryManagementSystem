@@ -27,12 +27,12 @@ namespace Library_Management_System.Controllers
             return View(peoplePhones);
         }
 
-        public async Task<IActionResult> Details(string? cpf)
+        public async Task<IActionResult> Details(string? id)
         {
-            if(IsCpfNull(cpf))
+            if(IsCpfNull(id))
                 return NotFound();
 
-            var person = await _context.People.AsNoTracking().FirstOrDefaultAsync(p => p.Cpf == cpf);
+            var person = await _context.People.AsNoTracking().FirstOrDefaultAsync(p => p.Cpf == id);
 
             if (IsContextValued(person))
                 return NotFound();
@@ -60,7 +60,7 @@ namespace Library_Management_System.Controllers
             return await DataBaseTransacion("insert", person);
         }
 
-        public async Task<IActionResult> Edit([FromRoute]string id)
+        public async Task<IActionResult> Edit(string id)
         {
             if (IsCpfNull(id))
                 return NotFound();
@@ -77,22 +77,22 @@ namespace Library_Management_System.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(string cpf, [Bind("Cpf,Name,Email,IsEmployer,PostalCode,State,City,Address,HouseNumber")] Person person)
+        public async Task<IActionResult> Edit(string id, [Bind("Cpf,Name,Email,IsEmployer,PostalCode,State,City,Address,HouseNumber")] Person person)
         {
             if (ModelState.IsValid)
                 return View(person);
-            if (cpf != person.Cpf)
+            if (id != person.Cpf)
                 return NotFound();
 
             return await DataBaseTransacion("update", person);
         }
 
-        public async Task<IActionResult> Delete(string cpf)
+        public async Task<IActionResult> Delete(string id)
         {
-            if (IsCpfNull(cpf))
+            if (IsCpfNull(id))
                 return NotFound();
 
-            Person? person = await _context.People.AsNoTracking().FirstOrDefaultAsync(m => m.Cpf == cpf);
+            Person? person = await _context.People.AsNoTracking().FirstOrDefaultAsync(m => m.Cpf == id);
 
             if (IsContextValued(person))
                 return NotFound();
@@ -102,9 +102,9 @@ namespace Library_Management_System.Controllers
 
         [HttpPost, ActionName("Delete")]
         [AutoValidateAntiforgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string cpf)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            Person? person = await _context.People.AsNoTracking().FirstOrDefaultAsync(m => m.Cpf == cpf);
+            Person? person = await _context.People.AsNoTracking().FirstOrDefaultAsync(m => m.Cpf == id);
             return await DataBaseTransacion("delete", person);
         }
 

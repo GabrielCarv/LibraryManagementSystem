@@ -47,7 +47,7 @@
                                         <td>@Html.DisplayFor(modelItem => item.Person.Name) </td>
                                         <td> @Html.DisplayFor(modelItem => item.Person.Email) </td>
                                         <td> @Html.DisplayFor(modelItem => item.Phones) </td>
-                                        <td>@Html.DisplayFor(modelItem => item.Person.IsEmployer)</td>
+                                        <td>@Html.DisplayFor(modelItem => Convert.ToBoolean(item.Person.IsEmployer))</td>
                                         <td> @Html.DisplayFor(modelItem => item.Person.PostalCode)</td>
                                         <td> @Html.DisplayFor(modelItem => item.Person.State)    </td>
                                         <td> @Html.DisplayFor(modelItem => item.Person.City) </td>

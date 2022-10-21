@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Library_Management_System.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Library_Management_System.Controllers
 {
@@ -30,6 +31,7 @@ namespace Library_Management_System.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            ViewData["BookId"] = new SelectList(_context.Books, "Id", "Title");
             ViewBag.classId = 5;
             return View();
         }
@@ -39,7 +41,10 @@ namespace Library_Management_System.Controllers
         public async Task<IActionResult> Create(Properties properties)
         {
             if (!ModelState.IsValid)
+            {
+                ViewData["BookId"] = new SelectList(_context.Books, "Id", "Title");
                 return View(properties);
+            }
 
             if (DoesItAlreadyExist(properties.Id))
                 ModelState.AddModelError("", "Property already does Exist!");
@@ -48,6 +53,7 @@ namespace Library_Management_System.Controllers
         }
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewData["BookId"] = new SelectList(_context.Books, "Id", "Title");
             if (IsIdNull(id)) return NotFound();
 
             Properties? properties = await _context.Properties.FindAsync(id);
@@ -102,6 +108,7 @@ namespace Library_Management_System.Controllers
         {
             return _context.Properties.AsNoTracking().Any(e => e.Id == id);
         }
+
 
         private async Task<IActionResult> DataBaseTransacion(string databaseCommand, Properties properties)
         {

@@ -9,8 +9,9 @@ namespace Library_Management_System.Models
         [Required]
         [Display(Name = "Damaged")]
         public bool IsDamaged { get; set; }
-
-        public virtual Book Book { get; set; }
+        public string Info { get; set; }
+        public int BookId { get; set; }
+        public virtual Book? Book { get; set; }
     }
 }
 

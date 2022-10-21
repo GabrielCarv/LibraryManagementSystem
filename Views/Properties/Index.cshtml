@@ -29,6 +29,8 @@
                             <tr>
                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending">@Html.DisplayNameFor(model => model.Id)</th>
                                 <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">@Html.DisplayNameFor(model => model.IsDamaged)</th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">@Html.DisplayNameFor(model => model.Infod)</th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">@Html.DisplayNameFor(model => model.Book)</th>
                                 <th aria-controls="table1" rowspan="1" colspan="1"> Actions</th>
                             </tr>
                         </thead>
@@ -38,6 +40,8 @@
                                 <tr>
                                     <td class="dtr-control sorting_1" tabindex="0">@Html.DisplayFor(modelItem => item.Id)</td>
                                     <td> @Html.DisplayFor(modelItem => item.IsDamaged)</td>
+                                    <td> @Html.DisplayFor(modelItem => item.Info)</td>
+                                    <td> @Html.DisplayFor(modelItem => item.Book.Title)</td>
                                     <td>@await Component.InvokeAsync("Form", new {formType = "ButtonGroup", routeid = Convert.ToString(item.Id)})</td>
                                 </tr>
                             }

@@ -4,6 +4,7 @@ using Library_Management_System.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Library_Management_System.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    partial class LibraryContextModelSnapshot : ModelSnapshot
+    [Migration("20221017192209_update_Properties")]
+    partial class update_Properties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,7 +54,7 @@ namespace Library_Management_System.Migrations
 
                     b.HasIndex("PublisherId");
 
-                    b.ToTable("Books", (string)null);
+                    b.ToTable("Books");
                 });
 
             modelBuilder.Entity("Library_Management_System.Models.BookCategory", b =>
@@ -67,7 +69,7 @@ namespace Library_Management_System.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("BookCategories", (string)null);
+                    b.ToTable("BookCategories");
                 });
 
             modelBuilder.Entity("Library_Management_System.Models.Category", b =>
@@ -84,7 +86,7 @@ namespace Library_Management_System.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Library_Management_System.Models.Person", b =>
@@ -128,7 +130,7 @@ namespace Library_Management_System.Migrations
 
                     b.HasKey("Cpf");
 
-                    b.ToTable("People", (string)null);
+                    b.ToTable("People");
                 });
 
             modelBuilder.Entity("Library_Management_System.Models.Phone", b =>
@@ -143,7 +145,7 @@ namespace Library_Management_System.Migrations
 
                     b.HasIndex("PersonCpf");
 
-                    b.ToTable("Phones", (string)null);
+                    b.ToTable("Phones");
                 });
 
             modelBuilder.Entity("Library_Management_System.Models.Properties", b =>
@@ -164,7 +166,7 @@ namespace Library_Management_System.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.ToTable("Properties", (string)null);
+                    b.ToTable("Properties");
                 });
 
             modelBuilder.Entity("Library_Management_System.Models.Publisher", b =>
@@ -181,7 +183,7 @@ namespace Library_Management_System.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Publishers", (string)null);
+                    b.ToTable("Publishers");
                 });
 
             modelBuilder.Entity("Library_Management_System.Models.Rent", b =>
@@ -213,7 +215,7 @@ namespace Library_Management_System.Migrations
 
                     b.HasIndex("PropertiesId");
 
-                    b.ToTable("Rents", (string)null);
+                    b.ToTable("Rents");
                 });
 
             modelBuilder.Entity("Library_Management_System.Models.Book", b =>

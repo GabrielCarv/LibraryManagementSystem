@@ -26,6 +26,7 @@ namespace Library_Management_System.Controllers
 
             if (IsContextValued(rent))
                 return NotFound();
+
             ViewBag.classId = 0;
             return View(rent);
         }
@@ -34,7 +35,7 @@ namespace Library_Management_System.Controllers
         public IActionResult Create()
         {
             ViewData["BookId"] = new SelectList(_context.Books, "Id", "Title");
-            ViewData["PersonId"] = new SelectList(_context.People, "Cpf", "Name");
+            ViewData["PersonCpf"] = new SelectList(_context.People, "Cpf", "Name");
             ViewBag.classId = 0;
             return View();
         }
@@ -46,7 +47,7 @@ namespace Library_Management_System.Controllers
             if (!ModelState.IsValid)
             {
                 ViewData["BookId"] = new SelectList(_context.Books, "Id", "Title");
-                ViewData["PersonId"] = new SelectList(_context.People, "Cpf", "Name");
+                ViewData["PersonCpf"] = new SelectList(_context.People, "Cpf", "Name");
                 return View(rent);
             }
 
@@ -67,7 +68,7 @@ namespace Library_Management_System.Controllers
                 return NotFound();
 
             ViewData["BookId"] = new SelectList(_context.Books, "Id", "Title");
-            ViewData["PersonId"] = new SelectList(_context.People, "Cpf", "Name");
+            ViewData["PersonCpf"] = new SelectList(_context.People, "Cpf", "Name");
             ViewBag.classId = 0;
 
             return View(rent);
@@ -80,7 +81,7 @@ namespace Library_Management_System.Controllers
             if(!ModelState.IsValid)
             {
                 ViewData["BookId"] = new SelectList(_context.Books, "Id", "Title");
-                ViewData["PersonId"] = new SelectList(_context.People, "Cpf", "Name");
+                ViewData["PersonCpf"] = new SelectList(_context.People, "Cpf", "Name");
                 return View(rent);
             }
 

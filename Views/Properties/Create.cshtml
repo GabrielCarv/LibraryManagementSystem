@@ -1,17 +1,42 @@
 ﻿@model Properties
 
-@{ViewData["Title"] = "Create";}
+@{
+    ViewData["Title"] = "Create";
+}
+
+@section StyleSheet {
+<link rel="stylesheet" href="../../plugins/select2/css/select2.min.css">
+<link rel="stylesheet" href="../../plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+}
 
 @await Component.InvokeAsync("Form", new {formType = "DivCardHead", thisModel = "Property"})
 
-<section class="content">
-    <div class="card">
-        <form asp-action="Create" method="post">
+<form asp-action="Create" method="post">
+    <section class="content">
+        <div class="card">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="card-body">
-                <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                    <input type="checkbox" class="custom-control-input" asp-for="IsDamaged" />
-                    <label class="form-check-label"> @Html.DisplayNameFor(model => model.IsDamaged) </label>
+                <div class="row">
+                    <div class="form-group col-12">
+                        <div class="custom-control custom-checkbox">
+                            <input asp-for="IsDamaged" class="custom-control-input" type="checkbox">
+                            <label for="Is Damaged?" class="custom-control-label">@Html.DisplayNameFor(model => model.IsDamaged)</label>
+                        </div>
+                    </div>
+                    <div class="form-group col-6">
+                        <label asp-for="Info" class="control-label"></label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">T</span>
+                            </div>
+                            <input asp-for="Info" class="form-control" placeholder="Information" />
+                            <span asp-validation-for="Info" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-6">
+                        <label asp-for="Book" class="control-label"></label>
+                        <select asp-for="BookId" class="form-control select2" asp-items=ViewBag.BookId></select>
+                    </div>
                 </div>
             </div>
             <!-- /.card-body -->
@@ -21,9 +46,16 @@
                     @await Component.InvokeAsync("Form", new { formType = "Button", className = "btn bg-gradient-secondary", action ="Index", functionName = "Back to List"})
                 </div>
             </div>
-        </form>
-        <!-- /.card-footer-->
-    </div>
-</section>
+            <!-- /.card-footer-->
+        </div>
+    </section>
+</form>
 
-@section Scripts {@{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}}
+@section Scripts {
+  @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    <!-- Select2 -->
+    <script src="../../plugins/select2/js/select2.full.min.js"></script>
+    <script src="~/js/select.js"></script>
+}
+}
