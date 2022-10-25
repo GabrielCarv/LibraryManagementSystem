@@ -52,8 +52,13 @@ namespace Library_Management_System.Controllers
             }
 
             if (DoesItAlreadyExist(rent.Id))
+            {
                 ModelState.AddModelError("", "Rent already does add!");
-
+                ViewData["BookId"] = new SelectList(_context.Books, "Id", "Title");
+                ViewData["PersonCpf"] = new SelectList(_context.People, "Cpf", "Name");
+                return View(rent);
+            }
+                
             return await DataBaseTransacion("insert", rent);
         }
 

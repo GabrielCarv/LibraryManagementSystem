@@ -40,8 +40,11 @@ namespace Library_Management_System.Controllers
                 return View(category);
 
             if (DoesItAlreadyExist(category.Id, category.Name))
+            {
                 ModelState.AddModelError("", "Category Name Already Exist!");
-
+                return View(category);
+            }
+               
             return await DataBaseTransacion("insert", category);
         }
 
@@ -67,7 +70,10 @@ namespace Library_Management_System.Controllers
                 return BadRequest();
 
             if (DoesItAlreadyExist(category.Id, category.Name))
+            {
                 ModelState.AddModelError("", "Category already does exist!");
+                return View(category);
+            }
 
             return await DataBaseTransacion("update", category);
         }

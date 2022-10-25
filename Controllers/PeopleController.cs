@@ -49,13 +49,16 @@ namespace Library_Management_System.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Cpf,Name,Email,IsEmployer,PostalCode,State,City,Address,HouseNumber")] Person person)
+        public async Task<IActionResult> Create(Person person)
         {
             if(!ModelState.IsValid)
                 return View(person);
 
             if(DoesItAlreadyExist(person.Cpf))
+            {
                 ModelState.AddModelError("", "Person already does add!");
+                return View(person);
+            }
 
             return await DataBaseTransacion("insert", person);
         }
@@ -81,8 +84,15 @@ namespace Library_Management_System.Controllers
         {
             if (ModelState.IsValid)
                 return View(person);
+
             if (id != person.Cpf)
                 return NotFound();
+
+            if (DoesItAlreadyExist(person.Cpf))
+            {
+                ModelState.AddModelError("", "Person already does add!");
+                return View(person);
+            }
 
             return await DataBaseTransacion("update", person);
         }

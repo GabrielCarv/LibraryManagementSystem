@@ -46,8 +46,11 @@ namespace Library_Management_System.Controllers
                 return View(properties);
             }
 
-            if (DoesItAlreadyExist(properties.Id))
+            if (DoesItAlreadyExist(properties.Id, properties.BookId))
+            {
                 ModelState.AddModelError("", "Property already does Exist!");
+                return View(properties);
+            }
 
             return await DataBaseTransacion("insert", properties);
         }
@@ -73,8 +76,11 @@ namespace Library_Management_System.Controllers
             if (id != properties.Id)
                 return BadRequest();
 
-            if (DoesItAlreadyExist(properties.Id))
+            if (DoesItAlreadyExist(properties.Id, properties.BookId))
+            {
                 ModelState.AddModelError("", "Property already does add!");
+                return View(properties);
+            }
 
             return await DataBaseTransacion("update", properties);
         }
@@ -104,9 +110,10 @@ namespace Library_Management_System.Controllers
             return properties != null;
         }
 
-        private bool DoesItAlreadyExist(int id)
+        private bool DoesItAlreadyExist(int id, int bookId)
         {
-            return _context.Properties.AsNoTracking().Any(e => e.Id == id);
+            bool itsAtDataBase = _context.Properties.AsNoTracking().Any(e => e.Id == id) || _context.Properties.AsNoTracking().Any(e => e.BookId == bookId);
+            return itsAtDataBase;
         }
 
 

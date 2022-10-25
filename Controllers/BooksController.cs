@@ -53,7 +53,7 @@ namespace Library_Management_System.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Book book)
+        public IActionResult Create(Book book)
         {
             if (!ModelState.IsValid)
             {
@@ -74,10 +74,10 @@ namespace Library_Management_System.Controllers
                 List<BookCategory> bookCategories = new List<BookCategory>();
                 List<string> categoryIds = Request.Form["CategoryId"].ToList();
                 Category category = new Category();
-                
+
                 foreach (string id in categoryIds)
                 {
-                    category =_context.Categories.Where(a => a.Id == Convert.ToInt32(id)).FirstOrDefault();
+                    category = _context.Categories.Where(a => a.Id == Convert.ToInt32(id)).FirstOrDefault();
                     BookCategory bookCategory = new BookCategory { Category = category, Book = book };
                     _context.BookCategories.Add(bookCategory);
                 }
@@ -85,7 +85,7 @@ namespace Library_Management_System.Controllers
                 _context.SaveChanges();
                 transaction.Commit();
             }
-            catch (Exception ex)
+            catch
             {
                 transaction.Rollback();
                 return BadRequest();
