@@ -61,7 +61,7 @@
                 <div class="row">
                     <div class="form-group col-md-12 col-6">
                         <label asp-for="Book.PublisherId" class="control-label"></label>
-                        <select asp-for="Book.PublisherId" class="form-control select2" asp-items="ViewBag.PublisherId"></select>
+                        <select asp-for="Book.PublisherId" class="select2bs4 select2-hidden-accessible" asp-items="ViewBag.PublisherId"></select>
                     </div>
                     @Html.Partial("_BookCategory")
                 </div>
