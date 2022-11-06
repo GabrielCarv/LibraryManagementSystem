@@ -105,7 +105,8 @@ namespace Library_Management_System.Controllers
 
         private bool DoesItAlreadyExist(int id, string name)
         {
-            bool anyEquals = _context.Publishers.AsNoTracking().Any(e => e.Id == id) || _context.Publishers.AsNoTracking().Any(e => e.Name == name);
+            //_context.Publishers.AsNoTracking().Any(e => e.Id == id) ||
+            bool anyEquals =  _context.Publishers.AsNoTracking().Any(e => e.Name == name);
             return anyEquals;
         }
 

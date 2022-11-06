@@ -11,6 +11,12 @@ namespace Library_Management_System.Models
         public string PhoneNumber { get; set; }
 
         public string IdPerson { get; set; }
-        public virtual Person Person { get; set; }
+        public virtual Person? Person { get; set; }
+
+        public Phone(string phoneNumber, string idPerson)
+        {
+            PhoneNumber = phoneNumber;
+            IdPerson = idPerson;
+        }
     }
 }

@@ -13,48 +13,71 @@ namespace Library_Management_System.Controllers
 
         public async Task<IActionResult> Index()
         {
-            List<Book> library = await _context.Books.AsNoTracking().Include(b => b.Publisher).ToListAsync();
-            List<BookCategoryViewModel> bookCategories = new List<BookCategoryViewModel>();
-
-            foreach (Book book in library)
+            try
             {
-                List<Category> categories = await _context.BookCategories.AsNoTracking().Where(a => a.BookId == book.Id).Select(a => a.Category).ToListAsync();
-                BookCategoryViewModel bookCategoriesIndex = new BookCategoryViewModel { Book = book, Categories = categories };
-                bookCategories.Add(bookCategoriesIndex);
+                List<Book> library = await _context.Books.AsNoTracking().Include(b => b.Publisher).ToListAsync();
+                List<BookCategoryViewModel> bookCategories = new List<BookCategoryViewModel>();
+
+                foreach (Book book in library)
+                {
+                    List<Category> categories = await _context.BookCategories.AsNoTracking().Where(a => a.BookId == book.Id).Select(a => a.Category).ToListAsync();
+                    BookCategoryViewModel bookCategoriesIndex = new BookCategoryViewModel { Book = book, Categories = categories };
+                    bookCategories.Add(bookCategoriesIndex);
+                }
+                ViewBag.classId = 1;
+                return View(bookCategories.ToList());
             }
-            ViewBag.classId = 1;
-            return View(bookCategories.ToList());
+            catch
+            {
+                throw new Exception();
+            }
         }
 
         public async Task<IActionResult> Details(int? id)
         {
-            if (IsIdNull(id))
-                return NotFound();
+            try
+            {
+                if (IsIdNull(id))
+                    return NotFound();
 
-            Book? book = await _context.Books.AsNoTracking().FirstOrDefaultAsync(pc => pc.Id == id);
+                Book? book = await _context.Books.AsNoTracking().FirstOrDefaultAsync(pc => pc.Id == id);
 
-            if (!IsContextValued(book))
-                return NotFound();
+                if (!IsContextValued(book))
+                    return NotFound();
 
-            List<Category> categories = _context.BookCategories.Where(a => a.BookId == book.Id).Select(a => a.Category).ToList();
-            BookCategoryViewModel bookCategories = new BookCategoryViewModel { Book = book, Categories = categories };
-            ViewBag.classId = 1;
-            return View(bookCategories);
+                List<Category> categories = _context.BookCategories.Where(a => a.BookId == book.Id).Select(a => a.Category).ToList();
+                BookCategoryViewModel bookCategories = new BookCategoryViewModel { Book = book, Categories = categories };
+                ViewBag.classId = 1;
+                return View(bookCategories);
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
         }
 
         [HttpGet]
         public IActionResult Create()
         {
-            ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Name");
-            ViewBag.CategoryId = new MultiSelectList(_context.Categories.ToList(), "Id", "Name");
-            ViewBag.classId = 1;
-            return View();
+            try
+            {
+                ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Name");
+                ViewBag.CategoryId = new MultiSelectList(_context.Categories.ToList(), "Id", "Name");
+                ViewBag.classId = 1;
+                return View();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Book book)
         {
+            
             if (!ModelState.IsValid)
             {
                 ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Name");
@@ -104,18 +127,26 @@ namespace Library_Management_System.Controllers
 
         public async Task<IActionResult> Edit(int? id)
         {
-            if (IsIdNull(id)) return NotFound();
+            try
+            {
+                if (IsIdNull(id)) return NotFound();
 
-            Book? book = await _context.Books.FindAsync(id);
+                Book? book = await _context.Books.FindAsync(id);
 
-            if (!IsContextValued(book)) return NotFound();
+                if (!IsContextValued(book)) return NotFound();
 
-            ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Name");
-            ViewBag.CategoryId = new MultiSelectList(_context.Categories.ToList(), "Id", "Name");
-            ViewBag.classId = 1;
-            BookCategoryViewModel bookCategoryViewModel = new BookCategoryViewModel { Book = book, ListItemCategory = new MultiSelectList(_context.Categories.ToList(), "Id", "Name"), SelectedCategories = _context.BookCategories.Where(e => e.BookId == id).Select(e => e.CategoryId).ToList() };
-            BookCategory bookCategory = new BookCategory {Category = _context.BookCategories.Where(e => e.BookId == id).Select(e => e.Category).FirstOrDefault(), Book = book };
-            return View(bookCategory);
+                ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Name");
+                ViewBag.CategoryId = new MultiSelectList(_context.Categories.ToList(), "Id", "Name");
+                ViewBag.classId = 1;
+                BookCategoryViewModel bookCategoryViewModel = new BookCategoryViewModel { Book = book, ListItemCategory = new MultiSelectList(_context.Categories.ToList(), "Id", "Name"), SelectedCategories = _context.BookCategories.Where(e => e.BookId == id).Select(e => e.CategoryId).ToList() };
+                BookCategory bookCategory = new BookCategory { Category = _context.BookCategories.Where(e => e.BookId == id).Select(e => e.Category).FirstOrDefault(), Book = book };
+                return View(bookCategory);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            
         }
 
         [HttpPost]
@@ -133,6 +164,14 @@ namespace Library_Management_System.Controllers
             if (id != book.Id)
             {
                 return NotFound();
+            }
+
+            if (DoesItAlreadyExist(book.Id, book.Title))
+            {
+                ModelState.AddModelError("", "Book Already does Exists");
+                ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Name");
+                ViewBag.CategoryId = new MultiSelectList(_context.Categories.ToList(), "Id", "Name");
+                return View(book);
             }
 
             using var transaction = _context.Database.BeginTransaction();
@@ -187,24 +226,38 @@ namespace Library_Management_System.Controllers
         }
         public async Task<IActionResult> Delete(int? id)
         {
-            if (IsIdNull(id)) return NotFound();
+            try
+            {
+                if (IsIdNull(id)) return NotFound();
 
-            Book? book = await _context.Books.AsNoTracking().Include(c => c.BookCategories).FirstOrDefaultAsync(c => c.Id == id);
+                Book? book = await _context.Books.AsNoTracking().Include(c => c.BookCategories).FirstOrDefaultAsync(c => c.Id == id);
 
-            if (!IsContextValued(book)) return NotFound();
-            ViewBag.classId = 1;
-            return View(book);
+                if (!IsContextValued(book)) return NotFound();
+                ViewBag.classId = 1;
+                return View(book);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            Book? book = await _context.Books.FindAsync(id);
-            _context.Books.Remove(book);
-            await _context.SaveChangesAsync();
+            try
+            {
+                Book? book = await _context.Books.FindAsync(id);
+                _context.Books.Remove(book);
+                await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public bool IsContextValued(Book? book)
@@ -214,7 +267,8 @@ namespace Library_Management_System.Controllers
 
         public bool DoesItAlreadyExist(int id, string title)
         {
-            return _context.Books.AsNoTracking().Any(e => e.Id == id) || _context.Books.AsNoTracking().Any(e => e.Title == title);
+            //_context.Books.AsNoTracking().Any(e => e.Id == id) ||
+            return _context.Books.AsNoTracking().Any(e => e.Title == title);
         }
     }
 }

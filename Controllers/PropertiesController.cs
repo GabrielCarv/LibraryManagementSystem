@@ -12,97 +12,154 @@ namespace Library_Management_System.Controllers
 
         public async Task<IActionResult> Index()
         {
-            ViewBag.classId = 5;
-            return View(await _context.Properties.AsNoTracking().ToListAsync());
+            try
+            {
+                List<Properties>? properties = await _context.Properties.AsNoTracking().ToListAsync();
+                ViewBag.classId = 5;
+                return View(properties);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
         }
 
         public async Task<IActionResult> Details(int? id)
         {
-            if (IsIdNull(id))
-                return NotFound();
+            try
+            {
+                if (IsIdNull(id))
+                    return NotFound();
 
-            Properties? properties = await _context.Properties.AsNoTracking().FirstOrDefaultAsync(pc => pc.Id == id);
+                Properties? properties = await _context.Properties.AsNoTracking().FirstOrDefaultAsync(pc => pc.Id == id);
 
-            if (!IsContextValued(properties))
-                return NotFound();
-            ViewBag.classId = 5;
-            return View(properties);
+                if (!IsContextValued(properties))
+                    return NotFound();
+                ViewBag.classId = 5;
+                return View(properties);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
         }
         [HttpGet]
         public IActionResult Create()
         {
-            ViewData["BookId"] = new SelectList(_context.Books, "Id", "Title");
-            ViewBag.classId = 5;
-            return View();
+            try
+            {
+                ViewData["BookId"] = new SelectList(_context.Books, "Id", "Title");
+                ViewBag.classId = 5;
+                return View();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
+            
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Properties properties)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                ViewData["BookId"] = new SelectList(_context.Books, "Id", "Title");
-                return View(properties);
-            }
+                if (!ModelState.IsValid)
+                {
+                    ViewData["BookId"] = new SelectList(_context.Books, "Id", "Title");
+                    return View(properties);
+                }
 
-            if (DoesItAlreadyExist(properties.Id, properties.BookId))
+                if (DoesItAlreadyExist(properties.Id, properties.BookId))
+                {
+                    ModelState.AddModelError("", "Property already does Exist!");
+                    return View(properties);
+                }
+
+                return await DataBaseTransacion("insert", properties);
+            }
+            catch (Exception ex)
             {
-                ModelState.AddModelError("", "Property already does Exist!");
-                return View(properties);
+                throw new Exception();
             }
-
-            return await DataBaseTransacion("insert", properties);
         }
         public async Task<IActionResult> Edit(int? id)
         {
-            ViewData["BookId"] = new SelectList(_context.Books, "Id", "Title");
-            if (IsIdNull(id)) return NotFound();
+            try
+            {
+                ViewData["BookId"] = new SelectList(_context.Books, "Id", "Title");
+                if (IsIdNull(id)) return NotFound();
 
-            Properties? properties = await _context.Properties.FindAsync(id);
+                Properties? properties = await _context.Properties.FindAsync(id);
 
-            if (!IsContextValued(properties)) return NotFound();
-            ViewBag.classId = 5;
-            return View(properties);
+                if (!IsContextValued(properties)) return NotFound();
+                ViewBag.classId = 5;
+                return View(properties);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Note,IsDamaged")] Properties properties)
         {
-            if (!ModelState.IsValid)
-                return View(properties);
-
-            if (id != properties.Id)
-                return BadRequest();
-
-            if (DoesItAlreadyExist(properties.Id, properties.BookId))
+            try
             {
-                ModelState.AddModelError("", "Property already does add!");
-                return View(properties);
-            }
+                if (!ModelState.IsValid)
+                    return View(properties);
 
-            return await DataBaseTransacion("update", properties);
+                if (id != properties.Id)
+                    return BadRequest();
+
+                if (DoesItAlreadyExist(properties.Id, properties.BookId))
+                {
+                    ModelState.AddModelError("", "Property already does add!");
+                    return View(properties);
+                }
+
+                return await DataBaseTransacion("update", properties);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
         }
 
         public async Task<IActionResult> Delete(int? id)
         {
-            if (IsIdNull(id)) return NotFound();
+            try
+            {
+                if (IsIdNull(id)) return NotFound();
 
-           Properties? properties = await _context.Properties.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
+                Properties? properties = await _context.Properties.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
 
-            if (!IsContextValued(properties)) return NotFound();
-            ViewBag.classId = 5;
-            return View(properties);
+                if (!IsContextValued(properties)) return NotFound();
+                ViewBag.classId = 5;
+                return View(properties);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            Properties? properties = await _context.Properties.FindAsync(id);
-
-            return await DataBaseTransacion("delete", properties);
+            try
+            {
+                Properties? properties = await _context.Properties.FindAsync(id);
+                return await DataBaseTransacion("delete", properties);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
         }
 
         private bool IsContextValued(Properties? properties)
@@ -112,7 +169,8 @@ namespace Library_Management_System.Controllers
 
         private bool DoesItAlreadyExist(int id, int bookId)
         {
-            bool itsAtDataBase = _context.Properties.AsNoTracking().Any(e => e.Id == id) || _context.Properties.AsNoTracking().Any(e => e.BookId == bookId);
+            //_context.Properties.AsNoTracking().Any(e => e.Id == id) ||
+            bool itsAtDataBase =  _context.Properties.AsNoTracking().Any(e => e.BookId == bookId);
             return itsAtDataBase;
         }
 

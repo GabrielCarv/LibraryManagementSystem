@@ -25,10 +25,8 @@ namespace Library_Management_System.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exception();
+                throw ex;
             }
-
-
         }
 
         public async Task<IActionResult> Detail(int? id)
@@ -48,7 +46,7 @@ namespace Library_Management_System.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exception();
+                throw ex;
             }
         }
 
@@ -79,7 +77,7 @@ namespace Library_Management_System.Controllers
                     return View(rent);
                 }
 
-                if (DoesItAlreadyExist(rent.Id))
+                if (DoesItAlreadyExist(rent.Id, rent.PropertiesId))
                 {
                     ModelState.AddModelError("", "Rent already does add!");
                     ViewData["BookId"] = new SelectList(_context.Properties, "Id", "Id");
@@ -89,7 +87,7 @@ namespace Library_Management_System.Controllers
 
                 return await DataBaseTransacion("insert", rent);
             }
-            catch (Exception ex) { throw new Exception(); }
+            catch (Exception ex) { throw ex; }
 
         }
 
@@ -111,7 +109,7 @@ namespace Library_Management_System.Controllers
 
                 return View(rent);
             }
-            catch (Exception ex) { throw new Exception(); }
+            catch (Exception ex) { throw ex; }
 
         }
 
@@ -131,8 +129,13 @@ namespace Library_Management_System.Controllers
                 if (id != rent.Id)
                     return BadRequest();
 
-                if (DoesItAlreadyExist(rent.Id))
+                if (DoesItAlreadyExist(rent.Id, rent.PropertiesId))
+                {
                     ModelState.AddModelError("", "Rent already does add!");
+                    ViewData["BookId"] = new SelectList(_context.Properties, "Id", "Id");
+                    ViewData["PersonCpf"] = new SelectList(_context.People, "Cpf", "Name");
+                    return View(rent);
+                }
 
                 return await DataBaseTransacion("update", rent);
             }
@@ -158,7 +161,7 @@ namespace Library_Management_System.Controllers
                 ViewBag.classId = 0;
                 return View(rent);
             }
-            catch (Exception ex) { throw new Exception(); }
+            catch (Exception ex) { throw ex; }
            
         }
 
@@ -175,9 +178,11 @@ namespace Library_Management_System.Controllers
             return rent != null;
         }
 
-        private bool DoesItAlreadyExist(int id)
+        private bool DoesItAlreadyExist(int id, int propertyid)
         {
-            return _context.Rents.AsNoTracking().Any(e => e.Id == id);
+            // _context.Rents.AsNoTracking().Any(e => e.Id == id) ||
+            bool anyExist = _context.Rents.AsNoTracking().Any(e => e.PropertiesId == propertyid);
+            return anyExist;
         }
 
         private async Task<IActionResult> DataBaseTransacion(string databaseCommand, Rent rent)

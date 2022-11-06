@@ -138,14 +138,11 @@ namespace Library_Management_System.Migrations
 
                     b.Property<string>("IdPerson")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PersonCpf")
                         .HasColumnType("nvarchar(11)");
 
                     b.HasKey("PhoneNumber");
 
-                    b.HasIndex("PersonCpf");
+                    b.HasIndex("IdPerson");
 
                     b.ToTable("Phones");
                 });
@@ -208,13 +205,13 @@ namespace Library_Management_System.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("RentRealReturnDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("Date");
 
                     b.Property<DateTime>("RentReturnDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("Date");
 
                     b.Property<DateTime>("RentalDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("Date");
 
                     b.HasKey("Id");
 
@@ -259,7 +256,7 @@ namespace Library_Management_System.Migrations
                 {
                     b.HasOne("Library_Management_System.Models.Person", "Person")
                         .WithMany()
-                        .HasForeignKey("PersonCpf");
+                        .HasForeignKey("IdPerson");
 
                     b.Navigation("Person");
                 });

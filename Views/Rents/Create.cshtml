@@ -24,40 +24,37 @@
                 <div class="row">
                     <div class="form-group col-6">
                         <label asp-for="PersonId" class="control-label"></label>
-                        <select asp-for="PersonId" class="form-control select2bs4 select2-hidden-accessible" asp-items=ViewBag.PersonCpf></select>
+                        <select asp-for="PersonId" class="form-control select2 " asp-items=ViewBag.PersonCpf></select>
                     </div>
                     <div class="form-group col-6">
                         <label asp-for="PropertiesId" class="control-label"></label>
-                        <select asp-for="PropertiesId" class="form-control select2bs4 select2-hidden-accessible"  asp-items=ViewBag.BookId></select>
+                        <select asp-for="PropertiesId" class="form-control select2" asp-items=ViewBag.BookId></select>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-6">
                         <label asp-for="RentalDate" class="control-label"></label>
-                        <div class="input-group date" id="RentalDate" data-target-input="nearest">
-                            <input asp-for="RentalDate" type="text" class="form-control datetimepicker-input" data-target="#RentalDate">
+                        <div class="input-group date" id="RentalDate">
+                            <input asp-for="RentalDate" type="text" class="form-control datetimepicker-input datemask2" data-target="#RentalDate">
                             <div class="input-group-append" data-target="#RentalDate" data-toggle="datetimepicker">
-                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                            </div>
-                            <span asp-validation-for="RentalDate" class="text-danger"></span>
+                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
                         </div>
                     </div>
                     <div class="form-group col-6">
                         <label asp-for="RentReturnDate" class="control-label"></label>
-                        <div class="input-group date" id="RentReturnDate" data-target-input="nearest">
-                            <input asp-for="RentReturnDate" type="text" class="form-control datetimepicker-input" data-target="#RentReturnDate">
+                        <div class="input-group date" id="RentReturnDate">
+                            <input asp-for="RentReturnDate" type="text" class="form-control datetimepicker-input datemask2" data-target="#RentReturnDate">
                             <div class="input-group-append" data-target="#RentReturnDate" data-toggle="datetimepicker">
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                             </div>
-                            <span asp-validation-for="RentReturnDate" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
                 <div class="form-group col-6">
                     <label asp-for="RentRealReturnDate" class="control-label"></label>
                     <div class="input-group date" id="RentRealReturnDate" data-target-input="nearest">
-                        <input asp-for="RentRealReturnDate" type="text" class="form-control datetimepicker-input" data-target="#RentRealReturnDate">
-                        <span asp-validation-for="RentRealReturnDate" class="text-danger"></span>
+                        <input asp-for="RentRealReturnDate" type="text" class="form-control datetimepicker-input datemask2" data-target="#RentRealReturnDate">
                         <div class="input-group-append" data-target="#RentRealReturnDate" data-toggle="datetimepicker">
                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                         </div>

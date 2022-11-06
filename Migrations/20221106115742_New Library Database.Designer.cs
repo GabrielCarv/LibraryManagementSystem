@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Library_Management_System.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    [Migration("20221104212758_att rent")]
-    partial class attrent
+    [Migration("20221106115742_New Library Database")]
+    partial class NewLibraryDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -136,8 +136,7 @@ namespace Library_Management_System.Migrations
             modelBuilder.Entity("Library_Management_System.Models.Phone", b =>
                 {
                     b.Property<string>("PhoneNumber")
-                        .HasMaxLength(8)
-                        .HasColumnType("nvarchar(8)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("IdPerson")
                         .IsRequired()
@@ -211,13 +210,13 @@ namespace Library_Management_System.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("RentRealReturnDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("Date");
 
                     b.Property<DateTime>("RentReturnDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("Date");
 
                     b.Property<DateTime>("RentalDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("Date");
 
                     b.HasKey("Id");
 
@@ -286,7 +285,7 @@ namespace Library_Management_System.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Library_Management_System.Models.Properties", "Properties")
+                    b.HasOne("Library_Management_System.Models.Properties", "Property")
                         .WithMany()
                         .HasForeignKey("PropertiesId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -294,7 +293,7 @@ namespace Library_Management_System.Migrations
 
                     b.Navigation("Person");
 
-                    b.Navigation("Properties");
+                    b.Navigation("Property");
                 });
 
             modelBuilder.Entity("Library_Management_System.Models.Book", b =>

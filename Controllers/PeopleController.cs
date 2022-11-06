@@ -14,105 +14,158 @@ namespace Library_Management_System.Controllers
 
         public async Task<IActionResult> Index()
         {
-            List<Person> people = await _context.People.AsNoTracking().ToListAsync();
-            List<PeoplePhoneViewModel> peoplePhones = new List<PeoplePhoneViewModel>();
-
-            foreach(Person person in people)
+            try
             {
-                PeoplePhoneViewModel peoplePhonesIndex = new PeoplePhoneViewModel { Person = person, Phone = _context.Phones.Where(a => a.IdPerson == person.Cpf).AsNoTracking().FirstOrDefault() };
-                peoplePhones.Add(peoplePhonesIndex);
+                List<Person> people = await _context.People.AsNoTracking().ToListAsync();
+                List<PeoplePhoneViewModel> peoplePhones = new List<PeoplePhoneViewModel>();
+
+                foreach (Person person in people)
+                {
+                    PeoplePhoneViewModel peoplePhonesIndex = new PeoplePhoneViewModel { Person = person, Phone = _context.Phones.Where(a => a.IdPerson == person.Cpf).AsNoTracking().FirstOrDefault() };
+                    peoplePhones.Add(peoplePhonesIndex);
+                }
+                ViewBag.classId = 2;
+                return View(peoplePhones);
             }
-            ViewBag.classId = 2;
-            return View(peoplePhones);
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<IActionResult> Details(string? id)
         {
-            if(IsCpfNull(id))
-                return NotFound();
+            try
+            {
+                if (IsCpfNull(id))
+                    return NotFound();
 
-            var person = await _context.People.AsNoTracking().FirstOrDefaultAsync(p => p.Cpf == id);
+                var person = await _context.People.AsNoTracking().FirstOrDefaultAsync(p => p.Cpf == id);
 
-            if (IsContextValued(person))
-                return NotFound();
-            ViewBag.classId = 2;
-            PeoplePhoneViewModel personPhones = new PeoplePhoneViewModel { Person = person, Phone = _context.Phones.Where(a => a.Person == person).AsNoTracking().FirstOrDefault() };
-            return View(personPhones);
+                if (IsContextValued(person))
+                    return NotFound();
+                ViewBag.classId = 2;
+                PeoplePhoneViewModel personPhones = new PeoplePhoneViewModel { Person = person, Phone = _context.Phones.Where(a => a.Person == person).AsNoTracking().FirstOrDefault() };
+                return View(personPhones);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
         }
         public IActionResult Create()
         {
-            ViewBag.classId = 2;
-            return View();
+            try
+            {
+                ViewBag.classId = 2;
+                return View();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Person person)
         {
-            if(!ModelState.IsValid)
-                return View(person);
-
-            if(DoesItAlreadyExist(person.Cpf))
+            try
             {
-                ModelState.AddModelError("", "Person already does add!");
-                return View(person);
-            }
+                if (!ModelState.IsValid)
+                    return View(person);
 
-            return await DataBaseTransacion("insert", person);
+                if (DoesItAlreadyExist(person.Cpf))
+                {
+                    ModelState.AddModelError("", "Person already does add!");
+                    return View(person);
+                }
+
+                return await DataBaseTransacion("insert", person);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+           
         }
 
         public async Task<IActionResult> Edit(string id)
         {
-            if (IsCpfNull(id))
-                return NotFound();
+            try
+            {
+                if (IsCpfNull(id))
+                    return NotFound();
 
-            Person? person = await _context.People.FindAsync(id);
+                Person? person = await _context.People.FindAsync(id);
 
-            if (!IsContextValued(person))
-                return NotFound();
+                if (!IsContextValued(person))
+                    return NotFound();
 
-            ViewBag.classId = 2;
-            PeoplePhoneViewModel personPhones = new PeoplePhoneViewModel { Person = person, Phone = _context.Phones.Where(a => a.Person == person).AsNoTracking().FirstOrDefault() };
-            return View(personPhones);
+                ViewBag.classId = 2;
+                PeoplePhoneViewModel personPhones = new PeoplePhoneViewModel { Person = person, Phone = _context.Phones.Where(a => a.Person == person).AsNoTracking().FirstOrDefault() };
+                return View(personPhones);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(string id, Person person)
         {
-            if (!ModelState.IsValid)
-                return View(person);
+            try
+            {
+                if (!ModelState.IsValid)
+                    return View(person);
 
-            if (id != person.Cpf)
-                return NotFound();
+                if (id != person.Cpf)
+                    return NotFound();
 
-            //if (DoesItAlreadyExist(person.Cpf))
-            //{
-            //    ModelState.AddModelError("", "Person already does add!");
-            //    return View(person);
-            //}
-
-            return await DataBaseTransacion("update", person);
+                return await DataBaseTransacion("update", person);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<IActionResult> Delete(string id)
         {
-            if (IsCpfNull(id))
-                return NotFound();
+            try
+            {
 
-            Person? person = await _context.People.AsNoTracking().FirstOrDefaultAsync(m => m.Cpf == id);
+                if (IsCpfNull(id))
+                    return NotFound();
 
-            if (IsContextValued(person))
-                return NotFound();
-            ViewBag.classId = 2;
-            return View(person);
+                Person? person = await _context.People.AsNoTracking().FirstOrDefaultAsync(m => m.Cpf == id);
+
+                if (IsContextValued(person))
+                    return NotFound();
+                ViewBag.classId = 2;
+                return View(person);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         [HttpPost, ActionName("Delete")]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            Person? person = await _context.People.AsNoTracking().FirstOrDefaultAsync(m => m.Cpf == id);
-            return await DataBaseTransacion("delete", person);
+            try
+            {
+                Person? person = await _context.People.AsNoTracking().FirstOrDefaultAsync(m => m.Cpf == id);
+                return await DataBaseTransacion("delete", person);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
 
         private bool IsContextValued(Person? person)
@@ -180,7 +233,7 @@ namespace Library_Management_System.Controllers
                             break;
                         case "update":
                             List<Phone> phonesFromView = new List<Phone>();
-                            List<Phone> phonesFromDB = _context.Phones.Where(e => e.Person.Cpf == person.Cpf).ToList();
+                            List<Phone> phonesFromDB = _context.Phones.Where(e => e.IdPerson == person.Cpf).ToList();
                             phonesFromView.Add(phone);
                             
                             foreach (Phone p in phonesFromDB)
@@ -197,7 +250,7 @@ namespace Library_Management_System.Controllers
                             throw new Exception("Please name a correct database command");
                     }
                 }
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
                 transaction.Commit();
             }
             catch
