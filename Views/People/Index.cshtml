@@ -29,7 +29,7 @@
                                     <th class="sorting sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending">@Html.DisplayNameFor(model => model.Person.Cpf) </th>
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">@Html.DisplayNameFor(model => model.Person.Name)</th>
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">@Html.DisplayNameFor(model => model.Person.Email)</th>
-                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">@Html.DisplayNameFor(model => model.Phones)</th>
+                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">@Html.DisplayNameFor(model => model.Phone)</th>
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">@Html.DisplayNameFor(model => model.Person.PostalCode)</th>
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">@Html.DisplayNameFor(model => model.Person.State)</th>
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">@Html.DisplayNameFor(model => model.Person.City) </th>
@@ -45,7 +45,9 @@
                                         <td class="dtr-control sorting_1" tabindex="0">@Html.DisplayFor(modelItem => item.Person.Cpf)</td>
                                         <td>@Html.DisplayFor(modelItem => item.Person.Name) </td>
                                         <td> @Html.DisplayFor(modelItem => item.Person.Email) </td>
-                                        <td> @Html.DisplayFor(modelItem => item.Phones) </td>
+
+                                        <td> @Html.DisplayFor(modelItem => item.Phone.PhoneNumber) </td>
+
                                         <td> @Html.DisplayFor(modelItem => item.Person.PostalCode)</td>
                                         <td> @Html.DisplayFor(modelItem => item.Person.State)    </td>
                                         <td> @Html.DisplayFor(modelItem => item.Person.City) </td>

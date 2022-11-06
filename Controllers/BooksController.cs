@@ -63,7 +63,12 @@ namespace Library_Management_System.Controllers
             }
 
             if (DoesItAlreadyExist(book.Id, book.Title))
+            {
                 ModelState.AddModelError("", "Book Already does ADD!");
+                ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Name");
+                ViewBag.CategoryId = new MultiSelectList(_context.Categories.ToList(), "Id", "Name");
+                return View(book);
+            }
 
             using var transaction = _context.Database.BeginTransaction();
 
@@ -108,7 +113,7 @@ namespace Library_Management_System.Controllers
             ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Name");
             ViewBag.CategoryId = new MultiSelectList(_context.Categories.ToList(), "Id", "Name");
             ViewBag.classId = 1;
-           // BookCategoryViewModel bookCategoryViewModel = new BookCategoryViewModel { Book = book, ListItemCategory = new MultiSelectList(_context.Categories.ToList(), "Id", "Name"), SelectedCategories = _context.BookCategories.Where(e => e.BookId == id).Select(e => e.CategoryId).ToList() };
+            BookCategoryViewModel bookCategoryViewModel = new BookCategoryViewModel { Book = book, ListItemCategory = new MultiSelectList(_context.Categories.ToList(), "Id", "Name"), SelectedCategories = _context.BookCategories.Where(e => e.BookId == id).Select(e => e.CategoryId).ToList() };
             BookCategory bookCategory = new BookCategory {Category = _context.BookCategories.Where(e => e.BookId == id).Select(e => e.Category).FirstOrDefault(), Book = book };
             return View(bookCategory);
         }
@@ -117,15 +122,13 @@ namespace Library_Management_System.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Book book)
         {
+            ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Name");
+            ViewBag.CategoryId = new MultiSelectList(_context.Categories.ToList(), "Id", "Name");
+            
             if (!ModelState.IsValid)
             {
-                ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Name");
-                ViewBag.CategoryId = new MultiSelectList(_context.Categories.ToList(), "Id", "Name");
                 return View(book);
             }
-
-            if (DoesItAlreadyExist(book.Id, book.Title))
-                ModelState.AddModelError("", "Book Already does ADD!");
 
             if (id != book.Id)
             {
@@ -137,7 +140,7 @@ namespace Library_Management_System.Controllers
             {
                 transaction.CreateSavepoint("Before");
 
-                List<string> categoryIds = Request.Form["SelectedCategories"].ToList();
+                List<string> categoryIds = Request.Form["CategoryId"].ToList();
 
                 _context.Books.Update(book);
                 _context.SaveChanges();
@@ -161,19 +164,15 @@ namespace Library_Management_System.Controllers
                     {
                         bookCategoriesFromView.Remove(bookCategoriesFromView.Where(a => a.CategoryId == bookCategory.CategoryId).First());
                         bookCategoriesFromDB.Remove(bookCategory);
+                        
                     }
                 }
 
-                _context.Remove(bookCategoriesFromDB);
-                _context.Add(bookCategoriesFromView);
+                _context.BookCategories.RemoveRange(bookCategoriesFromDB);
+                _context.BookCategories.AddRange(bookCategoriesFromView);
                 _context.SaveChanges();
 
                 transaction.Commit();
-
-                BookCategoryViewModel bookCategoriesViewModel = new BookCategoryViewModel { Book = book, ListItemCategory = new SelectList(_context.Categories, "CategoryId", "CategoryName"), SelectedCategories = _context.BookCategories.Where(e => e.BookId == book.Id).Select(e => e.CategoryId).ToList() };
-                ViewData["Publisher.Id"] = new SelectList(_context.Publishers, "PublishingCompanyId", "PublishingCompanyName", book.Publisher.Id);
-
-                return View(bookCategoriesViewModel);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -184,6 +183,7 @@ namespace Library_Management_System.Controllers
             {
                 _context.Dispose();
             }
+            return RedirectToAction(nameof(Index));
         }
         public async Task<IActionResult> Delete(int? id)
         {

@@ -4,11 +4,85 @@
     ViewData["Title"] = "Edit";
 }
 
+@section StyleSheet{
+
+<!-- Adicionando JQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+<!-- Adicionando Javascript -->
+<script>
+        $(document).ready(function () {
+
+    //Clean information from search if don't found anything
+    function Clean_search() {
+        document.getElementById('Address').value = ("");
+        document.getElementById('City').value = ("");
+        document.getElementById('State').value = ("");
+    }
+
+    function Hidden() {
+        document.getElementById('Address').hidden();
+        document.getElementById('City').hidden();
+        document.getElementById('State').hidden();
+    }
+
+        //Quando o campo cep perde o foco.
+        $("#PostalCode").blur(function () {
+
+            //Nova variável "cep" somente com dígitos.
+            var cep = $(this).val().replace(/\D/g, '');
+
+            //Verifica se campo cep possui valor informado.
+            if (cep != "") {
+                //Expressão regular para validar o CEP.
+                var validacep = /^[0-9]{8}$/;
+                //Valida o formato do CEP.
+                if (validacep.test(cep)) {
+                    //Preenche os campos com "..." enquanto consulta webservice.
+                    $("#Address").show();
+                    $("#City").show();
+                    $("#State").show();
+                    $("#Address").val("...");
+                    $("#City").val("...");
+                    $("#State").val("...");
+
+                    $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function (dados) {
+
+                        if (!("erro" in dados)) {
+                            $("#divHouseNumber").show();
+                            $("#Address").val(dados.logradouro);
+                            $("#City").val(dados.localidade);
+                            $("#State").val(dados.uf);
+                            $("#divHouseNumber").focus();
+                        }
+                        else {
+                            //Postal code not found.
+                            Hidden();
+                            Clean_search();
+                            //alert("Postal code not found.");
+                        }
+                    });
+                } //end if.
+                else {
+                    //Postal code is invalid.
+                    Hidden();
+                    Clean_search();
+                    //alert("Postal code is invalid.");
+                }
+            }
+            else {
+                Hidden();
+                Clean_search();
+            }
+        });
+    });
+</script>
+}
 @await Component.InvokeAsync("Form", new {formType = "DivCardHead", thisModel = "Person"})
 
-<section class="content">
-    <div class="card">
-        <form asp-action="Edit" method="post">
+<form asp-action="Edit" method="post">
+    <section class="content">
+        <div class="card">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Person.Cpf" />
             <div class="card-body">
@@ -104,7 +178,6 @@
                 </div>
                 <div id="_phone">
                     @Html.Partial("_CreatePhone")
-                    
                 </div>
                 <div>
                     <button type="button" id="NewNumberEdit" class="btn btn-success btn-block">Edit Number</button>
@@ -120,42 +193,44 @@
                     @await Component.InvokeAsync("Form", new { formType = "Button", className = "btn bg-gradient-secondary", action ="Index", functionName = "Back to List"})
                 </div>
             </div>
-        </form>
-        <!-- /.card-footer-->
-    </div>
-</section>
+            <!-- /.card-footer-->
+        </div>
+    </section>
+</form>
 
 @section Scripts {
-        @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");
- <script>
-    $("#NewNumberEdit").on("click", function () {
-        $.ajax({
-            url: '~/People/PartialCreate',
-            success: function (view) {
-                var buttId = Math.random() * 10;
-                var divFone = document.createElement('div');
-                divFone.className = 'form-group';
+        @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    <script>
+        $("#NewNumberEdit").on("click", function () {
+            $.ajax({
+                url: '~/People/PartialCreate',
+                success: function (view) {
+                    var buttId = Math.random() * 10;
+                    var divFone = document.createElement('div');
+                    divFone.className = 'form-group';
 
-                var buttonRemove = document.createElement('button');
-                var text = document.createTextNode(' X ');
+                    var buttonRemove = document.createElement('button');
+                    var text = document.createTextNode(' X ');
 
-                buttonRemove.type = 'button';
-                buttonRemove.id = 'buttId' + buttId;
-                buttonRemove.setAttribute('onclick', 'RemovePhone(this.id)');
-                buttonRemove.className = 'btn btn-danger';
+                    buttonRemove.type = 'button';
+                    buttonRemove.id = 'buttId' + buttId;
+                    buttonRemove.setAttribute('onclick', 'RemovePhone(this.id)');
+                    buttonRemove.className = 'btn btn-danger';
 
-                buttonRemove.appendChild(text);
+                    buttonRemove.appendChild(text);
 
-                divFone.appendChild(buttonRemove);
-                divFone.insertAdjacentHTML('afterbegin', view);
+                    divFone.appendChild(buttonRemove);
+                    divFone.insertAdjacentHTML('afterbegin', view);
 
-                var divPhone = document.getElementById("_phone");
-                divPhone.appendChild(divFone);
+                    var divPhone = document.getElementById("_phone");
+                    divPhone.appendChild(divFone);
 
-            }
+                }
+            });
         });
-    });
-</script>
-<script src="~/js/select.js"></script>
-<script src="~/js/peopleAction.js"></script>
-}}
+    </script>
+    <script src="~/js/select.js"></script>
+    <script src="~/js/peopleAction.js"></script>
+}
+}

@@ -4,6 +4,7 @@ using Library_Management_System.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Library_Management_System.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    partial class LibraryContextModelSnapshot : ModelSnapshot
+    [Migration("20221102212647_foreing key p_p")]
+    partial class foreingkeyp_p
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -200,11 +202,10 @@ namespace Library_Management_System.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("PersonId")
-                        .IsRequired()
+                    b.Property<string>("PersonCpf")
                         .HasColumnType("nvarchar(11)");
 
-                    b.Property<int>("PropertiesId")
+                    b.Property<int?>("PropertiesId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("RentRealReturnDate")
@@ -218,7 +219,7 @@ namespace Library_Management_System.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PersonId");
+                    b.HasIndex("PersonCpf");
 
                     b.HasIndex("PropertiesId");
 
@@ -279,19 +280,15 @@ namespace Library_Management_System.Migrations
                 {
                     b.HasOne("Library_Management_System.Models.Person", "Person")
                         .WithMany()
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PersonCpf");
 
-                    b.HasOne("Library_Management_System.Models.Properties", "Property")
+                    b.HasOne("Library_Management_System.Models.Properties", "Properties")
                         .WithMany()
-                        .HasForeignKey("PropertiesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PropertiesId");
 
                     b.Navigation("Person");
 
-                    b.Navigation("Property");
+                    b.Navigation("Properties");
                 });
 
             modelBuilder.Entity("Library_Management_System.Models.Book", b =>

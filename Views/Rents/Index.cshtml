@@ -29,8 +29,8 @@
                         <table id="example1" class="table table-bordered table-striped dataTable dtr-inline" aria-describedby="example1_info">
                             <thead>
                                 <tr>
-                                    <th class="sorting sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending">@Html.DisplayNameFor(model => model.Properties.Book.Title) </th>
-                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending"> @Html.DisplayNameFor(model => model.Person.Cpf)</th>
+                                    <th class="sorting sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending">@Html.DisplayNameFor(model => model.PropertiesId) </th>
+                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending"> @Html.DisplayNameFor(model => model.PersonId)</th>
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending"> @Html.DisplayNameFor(model => model.RentalDate)</th>
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending"> @Html.DisplayNameFor(model => model.RentReturnDate)</th>
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending"> @Html.DisplayNameFor(model => model.RentRealReturnDate)</th>
@@ -41,8 +41,8 @@
                                 @foreach (var item in Model)
                                 {
                                     <tr>
-                                        <td class="dtr-control sorting_1" tabindex="0">@Html.DisplayFor(modelItem => item.Properties.Book.Title)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.Person.Cpf)</td>
+                                        <td class="dtr-control sorting_1" tabindex="0">@Html.DisplayFor(modelItem => item.PropertiesId)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.PersonId)</td>
                                         <td>@Html.DisplayFor(modelItem => item.RentalDate)</td>
                                         <td>@Html.DisplayFor(modelItem => item.RentReturnDate)</td>
                                         <td> @Html.DisplayFor(modelItem => item.RentRealReturnDate) </td>

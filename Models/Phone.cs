@@ -7,7 +7,10 @@ namespace Library_Management_System.Models
         [DataType(DataType.PhoneNumber)]
         [Display(Name = "Phone Number")]
         [Key]
+        [Required(AllowEmptyStrings = false)]
         public string PhoneNumber { get; set; }
+
+        public string IdPerson { get; set; }
         public virtual Person Person { get; set; }
     }
 }

@@ -4,6 +4,6 @@
     {
         public Person Person { get; set; }
 
-        public List<Phone> Phones { get; set; }
+        public Phone Phone { get; set; }
     }
 }

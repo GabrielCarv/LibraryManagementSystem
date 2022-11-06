@@ -19,8 +19,7 @@ namespace Library_Management_System.Controllers
 
             foreach(Person person in people)
             {
-                List<Phone> phones = await _context.Phones.Where(a => a.Person == person).AsNoTracking().ToListAsync();
-                PeoplePhoneViewModel peoplePhonesIndex = new PeoplePhoneViewModel { Person = person, Phones = phones };
+                PeoplePhoneViewModel peoplePhonesIndex = new PeoplePhoneViewModel { Person = person, Phone = _context.Phones.Where(a => a.IdPerson == person.Cpf).AsNoTracking().FirstOrDefault() };
                 peoplePhones.Add(peoplePhonesIndex);
             }
             ViewBag.classId = 2;
@@ -37,8 +36,7 @@ namespace Library_Management_System.Controllers
             if (IsContextValued(person))
                 return NotFound();
             ViewBag.classId = 2;
-            List<Phone> phones = await _context.Phones.Where(a => a.Person == person).AsNoTracking().ToListAsync();
-            PeoplePhoneViewModel personPhones = new PeoplePhoneViewModel { Person = person, Phones = phones };
+            PeoplePhoneViewModel personPhones = new PeoplePhoneViewModel { Person = person, Phone = _context.Phones.Where(a => a.Person == person).AsNoTracking().FirstOrDefault() };
             return View(personPhones);
         }
         public IActionResult Create()
@@ -74,25 +72,24 @@ namespace Library_Management_System.Controllers
                 return NotFound();
 
             ViewBag.classId = 2;
-            List<Phone> phones = await _context.Phones.Where(a => a.Person.Cpf == id).AsNoTracking().ToListAsync();
-            PeoplePhoneViewModel personPhones = new PeoplePhoneViewModel { Person = person, Phones = phones };
+            PeoplePhoneViewModel personPhones = new PeoplePhoneViewModel { Person = person, Phone = _context.Phones.Where(a => a.Person == person).AsNoTracking().FirstOrDefault() };
             return View(personPhones);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(string id, [Bind("Cpf,Name,Email,IsEmployer,PostalCode,State,City,Address,HouseNumber")] Person person)
+        public async Task<IActionResult> Edit(string id, Person person)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return View(person);
 
             if (id != person.Cpf)
                 return NotFound();
 
-            if (DoesItAlreadyExist(person.Cpf))
-            {
-                ModelState.AddModelError("", "Person already does add!");
-                return View(person);
-            }
+            //if (DoesItAlreadyExist(person.Cpf))
+            //{
+            //    ModelState.AddModelError("", "Person already does add!");
+            //    return View(person);
+            //}
 
             return await DataBaseTransacion("update", person);
         }
@@ -159,7 +156,7 @@ namespace Library_Management_System.Controllers
                 }
                 await _context.SaveChangesAsync();
 
-                List<string> numbers = Request.Form["Number"].ToList();
+                List<string> numbers = Request.Form["Phone"].ToList();
                
                 foreach (string phoneNumber in numbers)
                 {
@@ -174,7 +171,7 @@ namespace Library_Management_System.Controllers
                             return BadRequest();
                         }
                     }
-                    Phone phone = new Phone { PhoneNumber = phoneNumber, Person = person };
+                    Phone phone = new Phone { PhoneNumber = phoneNumber, IdPerson = person.Cpf };
 
                     switch (databaseCommand.ToLower())
                     {

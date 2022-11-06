@@ -14,8 +14,9 @@ namespace Library_Management_System.Models
 
         [Display(Name = "Real Rent Return Date")]
         public DateTime RentRealReturnDate { get; set; }
-
-        public virtual Person? Person { get; set; } 
-        public virtual Properties? Properties { get; set; } 
+        public string PersonId { get; set; }
+        public int PropertiesId { get; set; }
+        public virtual Person? Person { get; set; }
+        public virtual Properties? Property { get; set; } 
     }
 }

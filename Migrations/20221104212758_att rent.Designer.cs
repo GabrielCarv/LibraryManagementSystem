@@ -4,6 +4,7 @@ using Library_Management_System.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Library_Management_System.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    partial class LibraryContextModelSnapshot : ModelSnapshot
+    [Migration("20221104212758_att rent")]
+    partial class attrent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -134,7 +136,8 @@ namespace Library_Management_System.Migrations
             modelBuilder.Entity("Library_Management_System.Models.Phone", b =>
                 {
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
 
                     b.Property<string>("IdPerson")
                         .IsRequired()
@@ -283,7 +286,7 @@ namespace Library_Management_System.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Library_Management_System.Models.Properties", "Property")
+                    b.HasOne("Library_Management_System.Models.Properties", "Properties")
                         .WithMany()
                         .HasForeignKey("PropertiesId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -291,7 +294,7 @@ namespace Library_Management_System.Migrations
 
                     b.Navigation("Person");
 
-                    b.Navigation("Property");
+                    b.Navigation("Properties");
                 });
 
             modelBuilder.Entity("Library_Management_System.Models.Book", b =>

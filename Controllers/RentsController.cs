@@ -8,109 +8,158 @@ namespace Library_Management_System.Controllers
 {
     public class RentsController : MainController
     {
-        public RentsController(LibraryContext context) : base(context){}
+        public RentsController(LibraryContext context) : base(context) { }
 
         public async Task<IActionResult> Index()
         {
-            var rent = await _context.Rents.AsNoTracking().ToListAsync();
-            ViewBag.classId = 0;
-            return View(rent);
+            try
+            {
+                List<Rent?> rents = await _context.Rents.AsNoTracking().ToListAsync();
+                foreach (Rent rent in rents)
+                {
+                    rent.Property = _context.Properties.AsNoTracking().Where(a => a.Id == rent.PropertiesId).FirstOrDefault();
+                    rent.Person = _context.People.AsNoTracking().Where(a => a.Cpf == rent.PersonId).FirstOrDefault();
+                }
+                ViewBag.classId = 0;
+                return View(rents);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
+
+
         }
 
         public async Task<IActionResult> Detail(int? id)
         {
-            if (IsIdNull(id))
-                return NotFound();
+            try
+            {
+                if (IsIdNull(id))
+                    return NotFound();
 
-            var rent = await _context.Rents.FirstOrDefaultAsync(r => r.Id == id);
+                var rent = await _context.Rents.FirstOrDefaultAsync(r => r.Id == id);
 
-            if (IsContextValued(rent))
-                return NotFound();
+                if (IsContextValued(rent))
+                    return NotFound();
 
-            ViewBag.classId = 0;
-            return View(rent);
+                ViewBag.classId = 0;
+                return View(rent);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
         }
 
         [HttpGet]
         public IActionResult Create()
         {
-            ViewData["BookId"] = new SelectList(_context.Books, "Id", "Title");
-            ViewData["PersonCpf"] = new SelectList(_context.People, "Cpf", "Name");
-            ViewBag.classId = 0;
-            return View();
+            try
+            {
+                ViewData["BookId"] = new SelectList(_context.Properties, "Id", "Id");
+                ViewData["PersonCpf"] = new SelectList(_context.People, "Cpf", "Name");
+                ViewBag.classId = 0;
+                return View();
+            }
+            catch (Exception ex) { throw new Exception(); }
+
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,RentalDate,RentReturnDate,RentRealReturnDate")] Rent rent)
+        public async Task<IActionResult> Create(Rent rent)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                ViewData["BookId"] = new SelectList(_context.Books, "Id", "Title");
-                ViewData["PersonCpf"] = new SelectList(_context.People, "Cpf", "Name");
-                return View(rent);
-            }
+                if (!ModelState.IsValid)
+                {
+                    ViewData["BookId"] = new SelectList(_context.Properties, "Id", "Id");
+                    ViewData["PersonCpf"] = new SelectList(_context.People, "Cpf", "Name");
+                    return View(rent);
+                }
 
-            if (DoesItAlreadyExist(rent.Id))
-            {
-                ModelState.AddModelError("", "Rent already does add!");
-                ViewData["BookId"] = new SelectList(_context.Books, "Id", "Title");
-                ViewData["PersonCpf"] = new SelectList(_context.People, "Cpf", "Name");
-                return View(rent);
+                if (DoesItAlreadyExist(rent.Id))
+                {
+                    ModelState.AddModelError("", "Rent already does add!");
+                    ViewData["BookId"] = new SelectList(_context.Properties, "Id", "Id");
+                    ViewData["PersonCpf"] = new SelectList(_context.People, "Cpf", "Name");
+                    return View(rent);
+                }
+
+                return await DataBaseTransacion("insert", rent);
             }
-                
-            return await DataBaseTransacion("insert", rent);
+            catch (Exception ex) { throw new Exception(); }
+
         }
 
         public async Task<IActionResult> Edit(int? id)
         {
-            if (IsIdNull(id))
-                return NotFound();
+            try
+            {
+                if (IsIdNull(id))
+                    return NotFound();
 
-            Rent? rent = await _context.Rents.AsNoTracking().FirstOrDefaultAsync(r => r.Id == id);
+                Rent? rent = await _context.Rents.AsNoTracking().FirstOrDefaultAsync(r => r.Id == id);
 
-            if (IsContextValued(rent))
-                return NotFound();
+                if (IsContextValued(rent))
+                    return NotFound();
 
-            ViewData["BookId"] = new SelectList(_context.Books, "Id", "Title");
-            ViewData["PersonCpf"] = new SelectList(_context.People, "Cpf", "Name");
-            ViewBag.classId = 0;
+                ViewData["BookId"] = new SelectList(_context.Books, "Id", "Tittle");
+                ViewData["PersonCpf"] = new SelectList(_context.People, "Cpf", "Name");
+                ViewBag.classId = 0;
 
-            return View(rent);
+                return View(rent);
+            }
+            catch (Exception ex) { throw new Exception(); }
+
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int? id, [Bind("Id,RentalDate,RentReturnDate,RentRealReturnDate")] Rent rent)
         {
-            if(!ModelState.IsValid)
+            try
             {
-                ViewData["BookId"] = new SelectList(_context.Books, "Id", "Title");
-                ViewData["PersonCpf"] = new SelectList(_context.People, "Cpf", "Name");
-                return View(rent);
+                if (!ModelState.IsValid)
+                {
+                    ViewData["BookId"] = new SelectList(_context.Books, "Id", "Tittle");
+                    ViewData["PersonCpf"] = new SelectList(_context.People, "Cpf", "Name");
+                    return View(rent);
+                }
+
+                if (id != rent.Id)
+                    return BadRequest();
+
+                if (DoesItAlreadyExist(rent.Id))
+                    ModelState.AddModelError("", "Rent already does add!");
+
+                return await DataBaseTransacion("update", rent);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
             }
 
-            if (id != rent.Id)
-                return BadRequest();
-
-            if (DoesItAlreadyExist(rent.Id))
-                ModelState.AddModelError("", "Rent already does add!");
-
-            return await DataBaseTransacion("update", rent);
         }
 
         public async Task<IActionResult> Delete(int? id)
         {
-            if (IsIdNull(id))
-                return NotFound();
+            try
+            {
+                if (IsIdNull(id))
+                    return NotFound();
 
-            var rent = await _context.Rents.AsNoTracking().FirstOrDefaultAsync(re => re.Id == id);
+                var rent = await _context.Rents.AsNoTracking().FirstOrDefaultAsync(re => re.Id == id);
 
-            if (IsContextValued(rent))
-                return NotFound();
+                if (IsContextValued(rent))
+                    return NotFound();
 
-            ViewBag.classId = 0;
-            return View(rent);
+                ViewBag.classId = 0;
+                return View(rent);
+            }
+            catch (Exception ex) { throw new Exception(); }
+           
         }
 
         [HttpPost, ActionName("Delete")]
@@ -152,7 +201,7 @@ namespace Library_Management_System.Controllers
                     default:
                         throw new Exception("Please name a correct database command");
                 }
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
                 transaction.Commit();
             }
             catch
