@@ -21,16 +21,13 @@ namespace Library_Management_System.Controllers
 
                 foreach (Person person in people)
                 {
-                    PeoplePhoneViewModel peoplePhonesIndex = new PeoplePhoneViewModel { Person = person, Phone = _context.Phones.Where(a => a.IdPerson == person.Cpf).AsNoTracking().FirstOrDefault() };
+                    PeoplePhoneViewModel peoplePhonesIndex = new PeoplePhoneViewModel { Person = person, Phone = _context.Phones.Where(a => a.PersonCpf == person.Cpf).AsNoTracking().FirstOrDefault() };
                     peoplePhones.Add(peoplePhonesIndex);
                 }
                 ViewBag.classId = 2;
                 return View(peoplePhones);
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            catch { throw new Exception(); }
         }
 
         public async Task<IActionResult> Details(string? id)
@@ -48,10 +45,7 @@ namespace Library_Management_System.Controllers
                 PeoplePhoneViewModel personPhones = new PeoplePhoneViewModel { Person = person, Phone = _context.Phones.Where(a => a.Person == person).AsNoTracking().FirstOrDefault() };
                 return View(personPhones);
             }
-            catch (Exception ex)
-            {
-                throw new Exception();
-            }
+            catch { throw new Exception(); }
         }
         public IActionResult Create()
         {
@@ -60,10 +54,7 @@ namespace Library_Management_System.Controllers
                 ViewBag.classId = 2;
                 return View();
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            catch { throw new Exception(); }
         }
 
         [HttpPost]
@@ -83,11 +74,8 @@ namespace Library_Management_System.Controllers
 
                 return await DataBaseTransacion("insert", person);
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-           
+            catch { throw new Exception(); }
+
         }
 
         public async Task<IActionResult> Edit(string id)
@@ -106,10 +94,7 @@ namespace Library_Management_System.Controllers
                 PeoplePhoneViewModel personPhones = new PeoplePhoneViewModel { Person = person, Phone = _context.Phones.Where(a => a.Person == person).AsNoTracking().FirstOrDefault() };
                 return View(personPhones);
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            catch { throw new Exception(); }
         }
 
         [HttpPost]
@@ -125,10 +110,7 @@ namespace Library_Management_System.Controllers
 
                 return await DataBaseTransacion("update", person);
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            catch { throw new Exception(); }
         }
 
         public async Task<IActionResult> Delete(string id)
@@ -146,10 +128,7 @@ namespace Library_Management_System.Controllers
                 ViewBag.classId = 2;
                 return View(person);
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            catch { throw new Exception(); }
         }
 
         [HttpPost, ActionName("Delete")]
@@ -161,10 +140,7 @@ namespace Library_Management_System.Controllers
                 Person? person = await _context.People.AsNoTracking().FirstOrDefaultAsync(m => m.Cpf == id);
                 return await DataBaseTransacion("delete", person);
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            catch { throw new Exception(); }
 
         }
 
@@ -224,16 +200,17 @@ namespace Library_Management_System.Controllers
                             return BadRequest();
                         }
                     }
-                    Phone phone = new Phone { PhoneNumber = phoneNumber, IdPerson = person.Cpf };
+                    Phone phone = new Phone(phoneNumber, person.Cpf);
 
                     switch (databaseCommand.ToLower())
                     {
                         case "insert":
                             _context.Phones.Add(phone);
+                            _context.SaveChanges();
                             break;
                         case "update":
                             List<Phone> phonesFromView = new List<Phone>();
-                            List<Phone> phonesFromDB = _context.Phones.Where(e => e.IdPerson == person.Cpf).ToList();
+                            List<Phone> phonesFromDB = _context.Phones.Where(e => e.PersonCpf == person.Cpf).ToList();
                             phonesFromView.Add(phone);
                             
                             foreach (Phone p in phonesFromDB)

@@ -4,14 +4,13 @@
     ViewData["Title"] = "Create";
 }
 
-@section StyleSheet {
-<link rel="stylesheet" href="../../plugins/select2/css/select2.min.css">
-<link rel="stylesheet" href="../../plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
-}
-
 @section DataPicker {
 <link rel="stylesheet" href="../../plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
 <link rel="stylesheet" href="../../plugins/daterangepicker/daterangepicker.css">
+}
+@section StyleSheet {
+<link rel="stylesheet" href="../../plugins/select2/css/select2.min.css">
+<link rel="stylesheet" href="../../plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 }
 
 @await Component.InvokeAsync("Form", new {formType = "DivCardHead", thisModel = "Rent"})
@@ -23,19 +22,19 @@
             <div class="card-body">
                 <div class="row">
                     <div class="form-group col-6">
-                        <label asp-for="PersonId" class="control-label"></label>
-                        <select asp-for="PersonId" class="form-control select2 " asp-items=ViewBag.PersonCpf></select>
+                        <label asp-for="Person" class="control-label"></label>
+                        <select asp-for="PersonId" class="form-control select2" asp-items=ViewBag.PersonCpf></select>
                     </div>
                     <div class="form-group col-6">
-                        <label asp-for="PropertiesId" class="control-label"></label>
+                        <label asp-for="Property" class="control-label"></label>
                         <select asp-for="PropertiesId" class="form-control select2" asp-items=ViewBag.BookId></select>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-6">
                         <label asp-for="RentalDate" class="control-label"></label>
-                        <div class="input-group date" id="RentalDate">
-                            <input asp-for="RentalDate" type="text" class="form-control datetimepicker-input datemask2" data-target="#RentalDate">
+                        <div class="input-group date"  data-target-input="nearest">
+                            <input asp-for="RentalDate" type="text" class="form-control datetimepicker-input" placeholder= "dd/MM/yyyy" data-target="#RentalDate">
                             <div class="input-group-append" data-target="#RentalDate" data-toggle="datetimepicker">
                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                         </div>
@@ -43,8 +42,8 @@
                     </div>
                     <div class="form-group col-6">
                         <label asp-for="RentReturnDate" class="control-label"></label>
-                        <div class="input-group date" id="RentReturnDate">
-                            <input asp-for="RentReturnDate" type="text" class="form-control datetimepicker-input datemask2" data-target="#RentReturnDate">
+                        <div class="input-group date" data-target-input="nearest">
+                            <input asp-for="RentReturnDate" type="text" class="form-control datetimepicker-input" placeholder= "dd/MM/yyyy" data-target="#RentReturnDate">
                             <div class="input-group-append" data-target="#RentReturnDate" data-toggle="datetimepicker">
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                             </div>
@@ -53,8 +52,8 @@
                 </div>
                 <div class="form-group col-6">
                     <label asp-for="RentRealReturnDate" class="control-label"></label>
-                    <div class="input-group date" id="RentRealReturnDate" data-target-input="nearest">
-                        <input asp-for="RentRealReturnDate" type="text" class="form-control datetimepicker-input datemask2" data-target="#RentRealReturnDate">
+                    <div class="input-group date"  data-target-input="nearest">
+                        <input asp-for="RentRealReturnDate" type="text" class="form-control datetimepicker-input" placeholder= "dd/MM/yyyy" data-target="#RentRealReturnDate">
                         <div class="input-group-append" data-target="#RentRealReturnDate" data-toggle="datetimepicker">
                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                         </div>
@@ -79,14 +78,8 @@
     await Html.RenderPartialAsync("_ValidationScriptsPartial");
     <!-- Select2 -->
     <script src="../../plugins/select2/js/select2.full.min.js"></script>
-    <!-- date-range-picker -->
-    <script src="../../plugins/daterangepicker/daterangepicker.js"></script>
-    <!-- Tempusdominus Bootstrap 4 -->
-    <script src="../../plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-    <!-- InputMask -->
     <script src="../../plugins/moment/moment.min.js"></script>
-    <script src="../../plugins/inputmask/jquery.inputmask.min.js"></script>
-    <script src="~/js/select.js"></script>
-    <script src="~/js/datetime.js"></script>
+    <script src="~/js/select2.js"></script>
+    <script src="~/js/datetimeTempusDom.js"></script>
 }
 }

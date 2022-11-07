@@ -29,16 +29,11 @@
         //Quando o campo cep perde o foco.
         $("#PostalCode").blur(function () {
 
-            //Nova variável "cep" somente com dígitos.
             var cep = $(this).val().replace(/\D/g, '');
 
-            //Verifica se campo cep possui valor informado.
             if (cep != "") {
-                //Expressão regular para validar o CEP.
                 var validacep = /^[0-9]{8}$/;
-                //Valida o formato do CEP.
                 if (validacep.test(cep)) {
-                    //Preenche os campos com "..." enquanto consulta webservice.
                     $("#Address").show();
                     $("#City").show();
                     $("#State").show();
@@ -59,7 +54,7 @@
                             //Postal code not found.
                             Hidden();
                             Clean_search();
-                            //alert("Postal code not found.");
+                            alert("Postal code not found.");
                         }
                     });
                 } //end if.
@@ -67,7 +62,7 @@
                     //Postal code is invalid.
                     Hidden();
                     Clean_search();
-                    //alert("Postal code is invalid.");
+                    alert("Postal code is invalid.");
                 }
             }
             else {
@@ -192,9 +187,9 @@
                     <div id="_phone form-group col-6">
                         @Html.Partial("_CreatePhone")
                     </div>
-                    <div class="input-group">
+                  <!--    <div class="input-group">
                         <button type="button" id="NewNumber" class="btn bg-gradient-success">Add Number</button>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <!-- /.card-body -->

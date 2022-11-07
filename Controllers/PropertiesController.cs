@@ -15,13 +15,14 @@ namespace Library_Management_System.Controllers
             try
             {
                 List<Properties>? properties = await _context.Properties.AsNoTracking().ToListAsync();
+                foreach (Properties property in properties)
+                {
+                    property.Book = _context.Books.AsNoTracking().Where(a => a.Id == property.BookId).FirstOrDefault();
+                }
                 ViewBag.classId = 5;
                 return View(properties);
             }
-            catch (Exception ex)
-            {
-                throw new Exception();
-            }
+            catch { throw new Exception(); }
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -38,7 +39,7 @@ namespace Library_Management_System.Controllers
                 ViewBag.classId = 5;
                 return View(properties);
             }
-            catch (Exception ex)
+            catch
             {
                 throw new Exception();
             }
@@ -52,7 +53,7 @@ namespace Library_Management_System.Controllers
                 ViewBag.classId = 5;
                 return View();
             }
-            catch (Exception ex)
+            catch
             {
                 throw new Exception();
             }
@@ -79,7 +80,7 @@ namespace Library_Management_System.Controllers
 
                 return await DataBaseTransacion("insert", properties);
             }
-            catch (Exception ex)
+            catch
             {
                 throw new Exception();
             }
@@ -97,10 +98,7 @@ namespace Library_Management_System.Controllers
                 ViewBag.classId = 5;
                 return View(properties);
             }
-            catch (Exception ex)
-            {
-                throw new Exception();
-            }
+            catch { throw new Exception(); }
         }
 
         [HttpPost]
@@ -123,10 +121,7 @@ namespace Library_Management_System.Controllers
 
                 return await DataBaseTransacion("update", properties);
             }
-            catch (Exception ex)
-            {
-                throw new Exception();
-            }
+            catch { throw new Exception(); }
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -138,13 +133,11 @@ namespace Library_Management_System.Controllers
                 Properties? properties = await _context.Properties.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
 
                 if (!IsContextValued(properties)) return NotFound();
+
                 ViewBag.classId = 5;
                 return View(properties);
             }
-            catch (Exception ex)
-            {
-                throw new Exception();
-            }
+            catch { throw new Exception(); }
         }
 
         [HttpPost, ActionName("Delete")]
@@ -156,7 +149,7 @@ namespace Library_Management_System.Controllers
                 Properties? properties = await _context.Properties.FindAsync(id);
                 return await DataBaseTransacion("delete", properties);
             }
-            catch (Exception ex)
+            catch
             {
                 throw new Exception();
             }

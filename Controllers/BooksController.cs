@@ -50,10 +50,7 @@ namespace Library_Management_System.Controllers
                 ViewBag.classId = 1;
                 return View(bookCategories);
             }
-            catch(Exception ex)
-            {
-                throw ex;
-            }
+            catch { throw new Exception(); }
         }
 
         [HttpGet]
@@ -66,11 +63,8 @@ namespace Library_Management_System.Controllers
                 ViewBag.classId = 1;
                 return View();
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            
+            catch { throw new Exception(); }
+
         }
 
         [HttpPost]
@@ -142,11 +136,8 @@ namespace Library_Management_System.Controllers
                 BookCategory bookCategory = new BookCategory { Category = _context.BookCategories.Where(e => e.BookId == id).Select(e => e.Category).FirstOrDefault(), Book = book };
                 return View(bookCategory);
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            
+            catch { throw new Exception(); }
+
         }
 
         [HttpPost]
@@ -233,13 +224,11 @@ namespace Library_Management_System.Controllers
                 Book? book = await _context.Books.AsNoTracking().Include(c => c.BookCategories).FirstOrDefaultAsync(c => c.Id == id);
 
                 if (!IsContextValued(book)) return NotFound();
+
                 ViewBag.classId = 1;
                 return View(book);
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            catch { throw new Exception(); }
         }
 
         [HttpPost, ActionName("Delete")]
@@ -254,10 +243,7 @@ namespace Library_Management_System.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            catch { throw new Exception(); }
         }
 
         public bool IsContextValued(Book? book)

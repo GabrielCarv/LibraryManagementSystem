@@ -17,10 +17,7 @@ namespace Library_Management_System.Controllers
                 ViewBag.classId = 3;
                 return View(categories);
             }
-            catch (Exception ex)
-            {
-                throw new Exception();
-            }
+            catch{ throw new Exception();}
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -35,11 +32,8 @@ namespace Library_Management_System.Controllers
                 ViewBag.classId = 3;
                 return View(category);
             }
-            catch (Exception ex)
-            {
-                throw new Exception();
-            }
-            
+            catch { throw new Exception(); }
+
         }
 
         public IActionResult Create()
@@ -49,7 +43,7 @@ namespace Library_Management_System.Controllers
                 ViewBag.classId = 3;
                 return View();
             }
-            catch (Exception ex)
+            catch
             {
                 throw new Exception();
             }
@@ -72,10 +66,7 @@ namespace Library_Management_System.Controllers
 
                 return await DataBaseTransacion("insert", category);
             }
-            catch (Exception ex)
-            {
-                throw new Exception();
-            }
+            catch { throw new Exception(); }
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -90,10 +81,7 @@ namespace Library_Management_System.Controllers
                 ViewBag.classId = 3;
                 return View(category);
             }
-            catch (Exception ex)
-            {
-                throw new Exception();
-            }
+            catch { throw new Exception(); }
         }
 
         [HttpPost]
@@ -116,10 +104,7 @@ namespace Library_Management_System.Controllers
 
                 return await DataBaseTransacion("update", category);
             }
-            catch (Exception ex)
-            {
-                throw new Exception();
-            }
+            catch { throw new Exception(); }
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -131,13 +116,11 @@ namespace Library_Management_System.Controllers
                 Category? category = await _context.Categories.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
 
                 if (!IsContextValued(category)) return NotFound();
+
                 ViewBag.classId = 3;
                 return View(category);
             }
-            catch (Exception ex)
-            {
-                throw new Exception();
-            }
+            catch { throw new Exception(); }
         }
 
         [HttpPost, ActionName("Delete")]
@@ -149,10 +132,7 @@ namespace Library_Management_System.Controllers
                 Category? category = await _context.Categories.FindAsync(id);
                 return await DataBaseTransacion("delete", category);
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            catch { throw new Exception(); }
         }
 
         private bool IsContextValued(Category? category)

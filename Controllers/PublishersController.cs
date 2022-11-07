@@ -83,8 +83,11 @@ namespace Library_Management_System.Controllers
         public async Task<IActionResult> Delete(int? id)
         {
             if (IsIdNull(id)) return NotFound();
+
             Publisher? publisher = await _context.Publishers.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
+
             if (!IsContextValued(publisher)) return NotFound();
+
             ViewBag.classId = 4;
 
             return View(publisher);

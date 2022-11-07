@@ -3,6 +3,7 @@ using Library_Management_System.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Library_Management_System.Models.ViewModel;
 
 namespace Library_Management_System.Controllers
 {
@@ -15,18 +16,29 @@ namespace Library_Management_System.Controllers
             try
             {
                 List<Rent?> rents = await _context.Rents.AsNoTracking().ToListAsync();
+                List<RentViewModel> rentsVM = new List<RentViewModel>();
                 foreach (Rent rent in rents)
                 {
                     rent.Property = _context.Properties.AsNoTracking().Where(a => a.Id == rent.PropertiesId).FirstOrDefault();
                     rent.Person = _context.People.AsNoTracking().Where(a => a.Cpf == rent.PersonId).FirstOrDefault();
+                    Book book = _context.Books.AsNoTracking().Where(a => a.Id == rent.Property.BookId).FirstOrDefault();
+                    RentViewModel rentVM = new RentViewModel
+                    {
+                        Rent = rent,
+                        Book = book,
+                        Property = rent.Property,
+                        Person = rent.Person,
+                        RentalDate = rent.RentalDate.ToString("dd/MM/yyyy"),
+                        RentRealReturnDate = rent.RentRealReturnDate.ToString("dd/MM/yyyy"),
+                        RentReturnDate = rent.RentReturnDate.ToString("dd/MM/yyyy")
+                    };
+                    rentsVM.Add(rentVM);
                 }
+
                 ViewBag.classId = 0;
-                return View(rents);
+                return View(rentsVM);
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            catch { throw new Exception(); }
         }
 
         public async Task<IActionResult> Detail(int? id)
@@ -44,10 +56,7 @@ namespace Library_Management_System.Controllers
                 ViewBag.classId = 0;
                 return View(rent);
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            catch { throw new Exception(); }
         }
 
         [HttpGet]
@@ -60,8 +69,7 @@ namespace Library_Management_System.Controllers
                 ViewBag.classId = 0;
                 return View();
             }
-            catch (Exception ex) { throw new Exception(); }
-
+            catch { throw new Exception(); }
         }
 
         [HttpPost]
@@ -85,9 +93,9 @@ namespace Library_Management_System.Controllers
                     return View(rent);
                 }
 
-                return await DataBaseTransacion("insert", rent);
+                return DataBaseTransacion("insert", rent);
             }
-            catch (Exception ex) { throw ex; }
+            catch { throw new Exception(); }
 
         }
 
@@ -109,13 +117,13 @@ namespace Library_Management_System.Controllers
 
                 return View(rent);
             }
-            catch (Exception ex) { throw ex; }
+            catch { throw new Exception(); }
 
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int? id, [Bind("Id,RentalDate,RentReturnDate,RentRealReturnDate")] Rent rent)
+        public IActionResult Edit(int? id, [Bind("Id,RentalDate,RentReturnDate,RentRealReturnDate")] Rent rent)
         {
             try
             {
@@ -137,9 +145,9 @@ namespace Library_Management_System.Controllers
                     return View(rent);
                 }
 
-                return await DataBaseTransacion("update", rent);
+                return DataBaseTransacion("update", rent);
             }
-            catch (Exception ex)
+            catch
             {
                 throw new Exception();
             }
@@ -154,15 +162,15 @@ namespace Library_Management_System.Controllers
                     return NotFound();
 
                 var rent = await _context.Rents.AsNoTracking().FirstOrDefaultAsync(re => re.Id == id);
+                rent.Property = _context.Properties.AsNoTracking().Where(a => a.Id == rent.PropertiesId).FirstOrDefault();
 
-                if (IsContextValued(rent))
-                    return NotFound();
+                if (!IsContextValued(rent)) return NotFound();
 
                 ViewBag.classId = 0;
                 return View(rent);
             }
-            catch (Exception ex) { throw ex; }
-           
+            catch { throw new Exception(); }
+
         }
 
         [HttpPost, ActionName("Delete")]
@@ -170,7 +178,7 @@ namespace Library_Management_System.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             Rent? rent = await _context.Rents.FindAsync(id);
-            return await DataBaseTransacion("delete", rent);
+            return DataBaseTransacion("delete", rent);
         }
 
         private bool IsContextValued(Rent? rent)
@@ -185,7 +193,7 @@ namespace Library_Management_System.Controllers
             return anyExist;
         }
 
-        private async Task<IActionResult> DataBaseTransacion(string databaseCommand, Rent rent)
+        private IActionResult DataBaseTransacion(string databaseCommand, Rent rent)
         {
             using var transaction = _context.Database.BeginTransaction();
             try

@@ -10,13 +10,13 @@ namespace Library_Management_System.Models
         [Required(AllowEmptyStrings = false)]
         public string PhoneNumber { get; set; }
 
-        public string IdPerson { get; set; }
+        public string PersonCpf { get; set; }
         public virtual Person? Person { get; set; }
 
-        public Phone(string phoneNumber, string idPerson)
+        public Phone(string phoneNumber, string personCpf)
         {
             PhoneNumber = phoneNumber;
-            IdPerson = idPerson;
+            PersonCpf = personCpf;
         }
     }
 }

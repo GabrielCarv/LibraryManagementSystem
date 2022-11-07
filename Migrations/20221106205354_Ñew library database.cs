@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Library_Management_System.Migrations
 {
-    public partial class NewLibraryDatabase : Migration
+    public partial class Ñewlibrarydatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -59,17 +59,18 @@ namespace Library_Management_System.Migrations
                 name: "Phones",
                 columns: table => new
                 {
-                    PhoneNumber = table.Column<string>(type: "nvarchar(12)", nullable: false),
-                    IdPerson = table.Column<string>(type: "nvarchar(11)", nullable: false)
+                    PhoneNumber = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PersonCpf = table.Column<string>(type: "nvarchar(11)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Phones", x => x.PhoneNumber);
                     table.ForeignKey(
-                        name: "FK_Phones_People_ IdPerson",
-                        column: x => x.IdPerson,
+                        name: "FK_Phones_People_PersonCpf",
+                        column: x => x.PersonCpf,
                         principalTable: "People",
-                        principalColumn: "Cpf");
+                        principalColumn: "Cpf",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -78,8 +79,8 @@ namespace Library_Management_System.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Author = table.Column<string>(type: "nvarchar(100)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Author = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(7,2)", precision: 7, scale: 2, nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     PublisherId = table.Column<int>(type: "int", nullable: false)
@@ -180,9 +181,9 @@ namespace Library_Management_System.Migrations
                 column: "PublisherId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Phones_ IdPerson",
+                name: "IX_Phones_PersonCpf",
                 table: "Phones",
-                column: "IdPerson");
+                column: "PersonCpf");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Properties_BookId",

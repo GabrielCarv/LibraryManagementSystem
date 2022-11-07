@@ -35,6 +35,7 @@ namespace Library_Management_System.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<BookCategory>()
                    .HasKey(b => new { b.BookId, b.CategoryId});
 
@@ -47,7 +48,5 @@ namespace Library_Management_System.Data
             modelBuilder.Entity<Book>()
                 .Property(v => v.Price).HasPrecision(7, 2);
         }
-        
-
     }
 }

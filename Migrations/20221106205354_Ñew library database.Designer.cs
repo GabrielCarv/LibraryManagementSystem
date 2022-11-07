@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Library_Management_System.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    [Migration("20221106115742_New Library Database")]
-    partial class NewLibraryDatabase
+    [Migration("20221106205354_Ñew library database")]
+    partial class Ñewlibrarydatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -138,11 +138,8 @@ namespace Library_Management_System.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("IdPerson")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PersonCpf")
+                        .IsRequired()
                         .HasColumnType("nvarchar(11)");
 
                     b.HasKey("PhoneNumber");
@@ -261,7 +258,9 @@ namespace Library_Management_System.Migrations
                 {
                     b.HasOne("Library_Management_System.Models.Person", "Person")
                         .WithMany()
-                        .HasForeignKey("PersonCpf");
+                        .HasForeignKey("PersonCpf")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Person");
                 });

@@ -22,6 +22,7 @@ namespace Library_Management_System.Models
         public string PersonId { get; set; }
         public int PropertiesId { get; set; }
         public virtual Person? Person { get; set; }
-        public virtual Properties? Property { get; set; } 
+        public virtual Properties? Property { get; set; }
+
     }
 }

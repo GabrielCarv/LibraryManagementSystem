@@ -136,13 +136,13 @@ namespace Library_Management_System.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("IdPerson")
+                    b.Property<string>("PersonCpf")
                         .IsRequired()
                         .HasColumnType("nvarchar(11)");
 
                     b.HasKey("PhoneNumber");
 
-                    b.HasIndex("IdPerson");
+                    b.HasIndex("PersonCpf");
 
                     b.ToTable("Phones");
                 });
@@ -256,7 +256,9 @@ namespace Library_Management_System.Migrations
                 {
                     b.HasOne("Library_Management_System.Models.Person", "Person")
                         .WithMany()
-                        .HasForeignKey("IdPerson");
+                        .HasForeignKey("PersonCpf")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Person");
                 });
