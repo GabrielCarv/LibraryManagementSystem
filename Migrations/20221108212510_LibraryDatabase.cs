@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Library_Management_System.Migrations
 {
-    public partial class Ñewlibrarydatabase : Migration
+    public partial class LibraryDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,7 +15,8 @@ namespace Library_Management_System.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -35,11 +36,14 @@ namespace Library_Management_System.Migrations
                     State = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    HouseNumber = table.Column<int>(type: "int", nullable: false)
+                    HouseNumber = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_People", x => x.Cpf);
+                    table.PrimaryKey("PK_People", x => new { x.Cpf, x.Id });
                 });
 
             migrationBuilder.CreateTable(
@@ -48,7 +52,8 @@ namespace Library_Management_System.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -60,11 +65,14 @@ namespace Library_Management_System.Migrations
                 columns: table => new
                 {
                     PhoneNumber = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    PersonCpf = table.Column<string>(type: "nvarchar(11)", nullable: false)
+                    PersonCpf = table.Column<string>(type: "nvarchar(11)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Phones", x => x.PhoneNumber);
+                    table.PrimaryKey("PK_Phones", x => new { x.PhoneNumber, x.Id});
                     table.ForeignKey(
                         name: "FK_Phones_People_PersonCpf",
                         column: x => x.PersonCpf,
@@ -83,7 +91,8 @@ namespace Library_Management_System.Migrations
                     Author = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(7,2)", precision: 7, scale: 2, nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    PublisherId = table.Column<int>(type: "int", nullable: false)
+                    PublisherId = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -101,11 +110,14 @@ namespace Library_Management_System.Migrations
                 columns: table => new
                 {
                     BookId = table.Column<int>(type: "int", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BookCategories", x => new { x.BookId, x.CategoryId });
+                    table.PrimaryKey("PK_BookCategories", x => new { x.BookId, x.CategoryId, x.Id });
                     table.ForeignKey(
                         name: "FK_BookCategories_Books_BookId",
                         column: x => x.BookId,
@@ -127,8 +139,9 @@ namespace Library_Management_System.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IsDamaged = table.Column<bool>(type: "bit", nullable: false),
-                    Info = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BookId = table.Column<int>(type: "int", nullable: false)
+                    Info = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BookId = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -151,7 +164,8 @@ namespace Library_Management_System.Migrations
                     RentReturnDate = table.Column<DateTime>(type: "Date", nullable: false),
                     RentRealReturnDate = table.Column<DateTime>(type: "Date", nullable: false),
                     PersonId = table.Column<string>(type: "nvarchar(11)", nullable: false),
-                    PropertiesId = table.Column<int>(type: "int", nullable: false)
+                    PropertiesId = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

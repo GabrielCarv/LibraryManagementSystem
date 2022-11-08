@@ -1,17 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Library_Management_System.Entity;
 
 namespace Library_Management_System.Models
 {
-    public class Category
+    public class Category : EntityBase
     {
-        public Category()
-        {
-            BookCategories = new HashSet<BookCategory>();
-        }
+        public Category() => BookCategories = new HashSet<BookCategory>();
 
-        [Key]
-        public int Id { get; set; }
-        [Required]
         public string Name { get; set; }
         public virtual ICollection<BookCategory> BookCategories { get; set; }
     }

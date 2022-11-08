@@ -1,20 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Library_Management_System.Entity;
 
 namespace Library_Management_System.Models
 {
-    public class Book
+    public class Book : EntityBase
     {
-        public Book()
-        {
-            BookCategories = new HashSet<BookCategory>();
-        }
-
-        [Key]
-        public int Id { get; set; }
-        [Required]
         public string Title { get; set; }
-        [Required]
         public string Author { get; set; }
         [Required]
         [Display(Name = "Price")]//"{0:0.00}"

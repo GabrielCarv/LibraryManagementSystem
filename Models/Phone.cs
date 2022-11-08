@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Library_Management_System.Entity;
 
 namespace Library_Management_System.Models
 {
-    public class Phone
+    public class Phone : EntityBase
     {
         [DataType(DataType.PhoneNumber)]
         [Display(Name = "Phone Number")]

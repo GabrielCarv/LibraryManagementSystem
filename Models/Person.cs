@@ -1,12 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Library_Management_System.Entity;
 
 namespace Library_Management_System.Models
 {
-    public class Person
+    public class Person : EntityBase
     {
         [Key]
         [StringLength(11, MinimumLength = 11)]
         public string Cpf{ get; set; }
+
         [Required(AllowEmptyStrings = false)]
         public string Name { get; set; }
         [Required(AllowEmptyStrings = false)]

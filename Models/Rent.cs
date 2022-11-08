@@ -1,12 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Library_Management_System.Entity;
 
 namespace Library_Management_System.Models
 {
-    public class Rent
+    public class Rent : EntityBase
     {
-        [Key]
-        public int Id { get; set; }
         [Required]
         [Display(Name = "Rental Date")]
         [Column(TypeName = "Date")]

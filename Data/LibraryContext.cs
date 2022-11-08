@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Library_Management_System.Models;
+using Library_Management_System.Extensions;
+using Library_Management_System.Maps;
 
 namespace Library_Management_System.Data
 {
@@ -14,6 +16,27 @@ namespace Library_Management_System.Data
 
             string connectionString = @"Server=SARAH\SQLEXPRESS01;Database=LMSdatabase;Trusted_Connection=True;";
             options.UseSqlServer(connectionString);
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            ChangeTracker.SetAuditProperties();
+            return await base.SaveChangesAsync(cancellationToken);
+        }
+        public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        {
+            ChangeTracker.SetAuditProperties();
+            return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+        public override int SaveChanges()
+        {
+            ChangeTracker.SetAuditProperties();
+            return base.SaveChanges();
+        }
+        public override int SaveChanges(bool acceptAllChangesOnSuccess)
+        {
+            ChangeTracker.SetAuditProperties();
+            return base.SaveChanges(acceptAllChangesOnSuccess);
         }
 
         public DbSet<Rent> Rents { get; set; }
@@ -47,6 +70,9 @@ namespace Library_Management_System.Data
 
             modelBuilder.Entity<Book>()
                 .Property(v => v.Price).HasPrecision(7, 2);
+
+            //Maping soft_Delete
+            modelBuilder.ApplyConfiguration(new BookMap());
         }
     }
 }
